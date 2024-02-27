@@ -10,9 +10,9 @@ Debian/Ubuntu or their derivatives:
 $ sudo apt install libncurses5-dev
 ```
 
-RHEL or other distros using the yum package manager:
+RHEL or their derivatives:
 ```bash
-sudo yum install ncurses-devel
+$ sudo yum install ncurses-devel
 ```
 
 Fedora or their derivatives:
@@ -24,19 +24,19 @@ After installing the ncurses library, we can now compile our code.
 
 ```bash
 $ gcc flappybird.c -o flappybird -lncurses
-or 
+# or you can also use the clang compiler 
 $ clang flappybird.c -o flappybird -lncurses
 ```
 
 ## How to play
-To start the game, simply run the compiled binary
+To start the game, simply run the compiled binary.
 ```bash
 $ ./flappybird
 ```
 
 Use **SPACE** key to fly, **Q** key to quit the game.
 
-Use the command down below to display debug panel while playing
+Use the command down below to display debug panel while playing:
 ```bash
-$ ./flap debug
+$ ./flappybird debug
 ```
