@@ -1,28 +1,42 @@
 # Flappy Bird in C
-A simple Flappy Bird clone made by using the C language.
+A simple Flappy Bird clone written in the C language and ncurses library for terminal-based graphics. 
 
-# Compiling and executing the code
+Player's objective is to navigate the bird through columns of pipes without colliding to them as much as possible.
+## Installation
 First off, we have to install the ncurses library.
 
-Debian/Ubuntu or their derivatives
-```console
+Debian/Ubuntu or their derivatives:
+```bash
 $ sudo apt install libncurses5-dev
 ```
 
-Fedora or their derivatives
-```console
+RHEL or other distros using the yum package manager:
+```bash
+sudo yum install ncurses-devel
+```
+
+Fedora or their derivatives:
+```bash
 $ sudo dnf install ncurses-devel
 ```
 
 After installing the ncurses library, we can now compile our code.
 
-```console
-$ gcc flap.c -o flap -lncurses
+```bash
+$ gcc flappybird.c -o flappybird -lncurses
 or 
-$ clang flap.c -o flap -lncurses
+$ clang flappybird.c -o flappybird -lncurses
 ```
 
-then run it 
-```console
-$ ./flap
+## How to play
+To start the game, simply run the compiled binary
+```bash
+$ ./flappybird
+```
+
+Use **SPACE** key to fly, **Q** key to quit the game.
+
+Use the command down below to display debug panel while playing
+```bash
+$ ./flap debug
 ```
