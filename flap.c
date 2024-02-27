@@ -16,10 +16,10 @@ Player;
 
 typedef struct Pipes
 {
-    int pipeY;
-    int previouspipeY;
-    int pipeupendX;
-    int pipedownpeakX;
+    int pipeX;
+    int previouspipeX;
+    int pipeupendY;
+    int pipedownpeakY;
 }
 Pipes;
 
@@ -35,7 +35,7 @@ int randomnum();
 void inGame(int *random);
 void debug();
 void endGame();
-void printPipe(int pipeY, int *randompipe);
+void printPipe(int pipeX, int *randompipe);
 void printBird();
 
 int randomnum()
@@ -53,28 +53,28 @@ void inGame(int *random)
     // Update the position of the bird and pipe in each iteration
     erase();
     printBird();
-    printPipe(pipes.pipeY, random);
+    printPipe(pipes.pipeX, random);
     sprintf(player.scoredisplay, "%d", player.score);
     mvaddstr(0, 0, player.scoredisplay);
 
     // Print the second pipe every time user passes the pipe
-    if (w.ws_col - pipes.pipeY <= 20)
+    if (w.ws_col - pipes.pipeX <= 20)
     {
         *random = randomnum();
-        pipes.previouspipeY = pipes.pipeY;
-        pipes.pipeY = 0;
+        pipes.previouspipeX = pipes.pipeX;
+        pipes.pipeX = 0;
     }
-    if (w.ws_col - pipes.previouspipeY <= 20)
+    if (w.ws_col - pipes.previouspipeX <= 20)
     {
-        printPipe(pipes.previouspipeY, &random2);
-        pipes.previouspipeY++;
-        if (w.ws_col - pipes.previouspipeY == 0)
+        printPipe(pipes.previouspipeX, &random2);
+        pipes.previouspipeX++;
+        if (w.ws_col - pipes.previouspipeX == 0)
         {
             random2 = *random;
-            pipes.previouspipeY = 0;
+            pipes.previouspipeX = 0;
         }
     }
-    pipes.pipeY++;
+    pipes.pipeX++;
     usleep(70000); // 100000
 }
 
@@ -82,10 +82,10 @@ void inGame(int *random)
 void debug()
 {
     char gapstr[100], gapstr2[100], birdstr[100], counterstr[100];
-    sprintf(gapstr, "%d", pipes.pipeupendX);
-    sprintf(gapstr2, "%d", pipes.pipedownpeakX);
+    sprintf(gapstr, "%d", pipes.pipeupendY);
+    sprintf(gapstr2, "%d", pipes.pipedownpeakY);
     sprintf(birdstr, "%d", player.birdY);
-    sprintf(counterstr, "%d", w.ws_col - pipes.pipeY);
+    sprintf(counterstr, "%d", w.ws_col - pipes.pipeX);
     mvaddstr(0, 3, counterstr);
     mvaddstr(0, 6, gapstr);
     mvaddstr(0, 9, gapstr2);
@@ -113,9 +113,9 @@ void endGame()
         exit(0);
     }
 
-    if (w.ws_col - pipes.pipeY == 20)
+    if (w.ws_col - pipes.pipeX == 20)
     {
-        if (player.birdY <= pipes.pipeupendX || player.birdY >= pipes.pipedownpeakX)
+        if (player.birdY <= pipes.pipeupendY || player.birdY >= pipes.pipedownpeakY)
         {
             usleep(400000);
             endwin();
@@ -137,19 +137,19 @@ void endGame()
 }
 
 // Print the pipes and the gaps
-void printPipe(int pipeY, int *randompipe)
+void printPipe(int pipeX, int *randompipe)
 {
     for (int i = 0; i < w.ws_row; i++)
     {
         if (i == *randompipe)
         {
-            mvaddstr(i, w.ws_col - pipeY - 1, "[#]");
-            pipes.pipeupendX = i;
+            mvaddstr(i, w.ws_col - pipeX - 1, "[#]");
+            pipes.pipeupendY = i;
             i = i + 4;
-            mvaddstr(i, w.ws_col - pipeY - 1, "[#]");
-            pipes.pipedownpeakX = i;
+            mvaddstr(i, w.ws_col - pipeX - 1, "[#]");
+            pipes.pipedownpeakY = i;
         }
-        mvaddstr(i, w.ws_col - pipeY, "#");
+        mvaddstr(i, w.ws_col - pipeX, "#");
     }
 }
 
