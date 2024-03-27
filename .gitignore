@@ -1,6 +1,10 @@
+# Ignore all files without file extension except makefiles (Used for when source code is compiled like this: $ gcc main.c -o main) 
 *
 !/**/
 !*.*
+!makefile
 
 *.out
-*.o
+
+/testing
+/.vscode

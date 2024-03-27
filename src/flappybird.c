@@ -4,27 +4,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-
-typedef struct Player
-{
-    int birdY;
-    int pressed;
-    int score;
-    char scoredisplay[100];
-}
-Player;
-
-typedef struct Pipes
-{
-    int pipeX;
-    int previouspipeX;
-    int pipeupendY;
-    int pipedownpeakY;
-}
-Pipes;
+#include "headers.h"
 
 struct winsize w;
-
 Player player;
 Pipes pipes;
 int random2;
@@ -33,10 +15,7 @@ bool debugmode = false;
 bool checkterminalresolution();
 int randomnum();
 void inGame(int *random);
-void debug();
 void endGame();
-void printPipe(int pipeX, int *randompipe);
-void printBird();
 
 int randomnum()
 {
@@ -52,11 +31,10 @@ void inGame(int *random)
 {
     // Update the position of the bird and pipe in each iteration
     erase();
-    printBird();
-    printPipe(pipes.pipeX, random);
-    sprintf(player.scoredisplay, "%d", player.score);
-    mvaddstr(0, 0, player.scoredisplay);
-
+    printScore(&player);
+    printBird(&player);
+    printPipe(&pipes, pipes.pipeX, random, w);
+    
     // Print the second pipe every time user passes the pipe
     if (w.ws_col - pipes.pipeX <= 20)
     {
@@ -66,7 +44,7 @@ void inGame(int *random)
     }
     if (w.ws_col - pipes.previouspipeX <= 20)
     {
-        printPipe(pipes.previouspipeX, &random2);
+        printPipe(&pipes, pipes.previouspipeX, &random2, w);
         pipes.previouspipeX++;
         if (w.ws_col - pipes.previouspipeX == 0)
         {
@@ -76,20 +54,6 @@ void inGame(int *random)
     }
     pipes.pipeX++;
     usleep(70000); // 100000
-}
-
-// This function prints some variables such as gaps[] and player.birdY in top left corner of the screen for easier experience of debugging
-void debug()
-{
-    char gapstr[100], gapstr2[100], birdstr[100], counterstr[100];
-    sprintf(gapstr, "%d", pipes.pipeupendY);
-    sprintf(gapstr2, "%d", pipes.pipedownpeakY);
-    sprintf(birdstr, "%d", player.birdY);
-    sprintf(counterstr, "%d", w.ws_col - pipes.pipeX);
-    mvaddstr(0, 3, counterstr);
-    mvaddstr(0, 6, gapstr);
-    mvaddstr(0, 9, gapstr2);
-    mvaddstr(0, 12, birdstr);
 }
 
 void endGame()
@@ -109,7 +73,7 @@ void endGame()
         usleep(400000);
         endwin();
         printf("Game Over. You hit to the ground.\n");
-        printf("Score: %s\n", player.scoredisplay);
+        printf("Score: %s\n", player.score_display);
         exit(0);
     }
 
@@ -120,7 +84,7 @@ void endGame()
             usleep(400000);
             endwin();
             printf("Game Over. You crashed to the wall.\n");
-            printf("Score: %s\n", player.scoredisplay);
+            printf("Score: %s\n", player.score_display);
             exit(0);
         }
         player.score++;
@@ -131,37 +95,9 @@ void endGame()
     {
         endwin();
         printf("Exited from the game!\n");
-        printf("Score: %s\n", player.scoredisplay);
+        printf("Score: %s\n", player.score_display);
         exit(0);
     }
-}
-
-// Print the pipes and the gaps
-void printPipe(int pipeX, int *randompipe)
-{
-    for (int i = 0; i < w.ws_row; i++)
-    {
-        if (i == *randompipe)
-        {
-            mvaddstr(i, w.ws_col - pipeX - 1, "[#]");
-            pipes.pipeupendY = i;
-            i = i + 4;
-            mvaddstr(i, w.ws_col - pipeX - 1, "[#]");
-            pipes.pipedownpeakY = i;
-        }
-        mvaddstr(i, w.ws_col - pipeX, "#");
-    }
-}
-
-// Controlling of the bird
-void printBird()
-{
-    if (player.pressed == ' ')
-    {
-        player.birdY = player.birdY - 3;
-    }
-    player.birdY++;
-    mvaddstr(player.birdY, 20, "-O>");
 }
 
 // Check if user is using small terminal
@@ -211,7 +147,7 @@ int main(int argc, char *argv[])
         player.pressed = wgetch(win);
         inGame(&random);
         if (debugmode == true)
-            debug();
+            debug(player, pipes, w);
         endGame();
     }
 }
