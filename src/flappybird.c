@@ -73,7 +73,7 @@ void endGame()
         usleep(400000);
         endwin();
         printf("Game Over. You hit to the ground.\n");
-        printf("Score: %s\n", player.score_display);
+        printf("Score: %d\n", player.score);
         exit(0);
     }
 
@@ -84,7 +84,7 @@ void endGame()
             usleep(400000);
             endwin();
             printf("Game Over. You crashed to the wall.\n");
-            printf("Score: %s\n", player.score_display);
+            printf("Score: %d\n", player.score);
             exit(0);
         }
         player.score++;
@@ -95,7 +95,7 @@ void endGame()
     {
         endwin();
         printf("Exited from the game!\n");
-        printf("Score: %s\n", player.score_display);
+        printf("Score: %d\n", player.score);
         exit(0);
     }
 }

@@ -48,4 +48,6 @@ void printScore(Player *player)
     }
     snprintf(player->score_display, score_length + 1, "%d", player->score);
     mvaddstr(0, 0, player->score_display);
+
+    free(player->score_display);
 }
