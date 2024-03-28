@@ -24,11 +24,7 @@ void printPipe(Pipes *pipes, int pipeX, int *randompipe, struct winsize w)
 // Controlling of the bird
 void printBird(Player *player)
 {
-    if (player->pressed == ' ')
-    {
-        player->birdY = player->birdY - 3;
-    }
-    player->birdY++;
+    (player->pressed == ' ') ? (player->birdY -= 2) : (player->birdY++);
     mvaddstr(player->birdY, 20, "-O>");
 }
 
@@ -43,6 +39,7 @@ void printScore(Player *player)
     player->score_display = malloc(score_length + 1);
     if (player->score_display == NULL)
     {
+        endwin();
         printf("Memory allocation error\n");
         exit(EXIT_FAILURE);
     }

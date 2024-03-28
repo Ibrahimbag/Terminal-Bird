@@ -64,7 +64,7 @@ void endGame()
     {
         endwin();
         printf("Minimun terminal resolution required for this game is 12x48\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     // Check if user collided with pipes or ground
@@ -74,7 +74,7 @@ void endGame()
         endwin();
         printf("Game Over. You hit to the ground.\n");
         printf("Score: %d\n", player.score);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 
     if (w.ws_col - pipes.pipeX == 20)
@@ -85,7 +85,7 @@ void endGame()
             endwin();
             printf("Game Over. You crashed to the wall.\n");
             printf("Score: %d\n", player.score);
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
         player.score++;
     }
@@ -96,7 +96,7 @@ void endGame()
         endwin();
         printf("Exited from the game!\n");
         printf("Score: %d\n", player.score);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 }
 
@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
         printf("Examples:\n");
         printf("./flappybird\n");
         printf("./flappybird debug\n");
-        return 0;
+        return EXIT_FAILURE;
     }
 
     if (argc == 2 && strcmp(argv[1], "debug") == 0)

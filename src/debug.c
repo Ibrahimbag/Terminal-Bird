@@ -17,8 +17,9 @@ void debug(Player player, Pipes pipes, struct winsize w)
     
     if (gapstr == NULL || gapstr2 == NULL || birdstr == NULL || counterstr == NULL)
     {
+        endwin();
         printf("Memory allocation failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     
     // Copy integer values to a string and add NUL terminator 
