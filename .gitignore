@@ -5,6 +5,7 @@
 !makefile
 
 *.out
+*.o
 
 /testing
 /.vscode
