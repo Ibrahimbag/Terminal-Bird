@@ -6,18 +6,18 @@
 #include <string.h>
 #include "headers.h"
 
-struct winsize w;
-Player player;
-Pipes pipes;
-int random2;
-bool debugmode = false;
+static struct winsize w;
+static Player player;
+static Pipes pipes;
+static int random2;
+static bool debugmode = false;
 
-bool checkterminalresolution();
-int randomnum();
+bool checkterminalresolution(void);
+int randomnum(void);
 void inGame(int *random);
-void endGame();
+void endGame(void);
 
-int randomnum()
+int randomnum(void)
 {
     int random = (rand() % w.ws_row) + 1;
     if (random >= w.ws_row - 5)
@@ -56,7 +56,7 @@ void inGame(int *random)
     usleep(70000); // 100000
 }
 
-void endGame()
+void endGame(void)
 {
     // Check if users terminal resolution is minimun 12x48 pixels
     int ret = checkterminalresolution();
@@ -101,7 +101,7 @@ void endGame()
 }
 
 // Check if user is using small terminal
-bool checkterminalresolution()
+bool checkterminalresolution(void)
 {
     if (w.ws_row < 12 || w.ws_col < 48)
     {
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     }
 
     // Set up the screen and keypad
-    srand(time(NULL));
+    srand((unsigned int) time(NULL));
     WINDOW *win = initscr();
     noecho();
     curs_set(0);
