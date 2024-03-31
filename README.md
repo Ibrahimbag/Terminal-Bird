@@ -12,6 +12,8 @@ $ sudo apt install git make clang libncurses5-dev libncursesw5-dev
 
 $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
 
+$ cd Flappy-Bird-In-C
+
 $ make
 ```
 ### GNU/Linux
@@ -22,6 +24,8 @@ You can follow this tutorial to install ncurses: https://www.cyberciti.biz/faq/l
 After installing all the required packages, we can now clone and build our code:
 ```bash
 $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
+
+$ cd Flappy-Bird-In-C
 
 $ make
 ```
