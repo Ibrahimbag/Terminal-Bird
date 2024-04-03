@@ -11,13 +11,13 @@ void printPipe(Pipes *pipes, int pipeX, int *randompipe, struct winsize w)
     {
         if (i == *randompipe)
         {
-            mvaddstr(i, w.ws_col - pipeX - 1, "[#]");
+            mvaddstr(i, w.ws_col - pipeX - 1, "▟██▙");
             pipes->pipeupendY = i;
             i = i + 4;
-            mvaddstr(i, w.ws_col - pipeX - 1, "[#]");
+            mvaddstr(i, w.ws_col - pipeX - 1, "▜██▛");
             pipes->pipedownpeakY = i;
         }
-        mvaddstr(i, w.ws_col - pipeX, "#");
+        mvaddstr(i, w.ws_col - pipeX, "██");
     }
 }
 
@@ -25,7 +25,7 @@ void printPipe(Pipes *pipes, int pipeX, int *randompipe, struct winsize w)
 void printBird(Player *player)
 {
     (player->pressed == ' ') ? (player->birdY -= 2) : (player->birdY++);
-    mvaddstr(player->birdY, 20, "-O>");
+    mvaddstr(player->birdY, 20, "██");
 }
 
 // Print player's current score in up left corner of the screen 
@@ -47,4 +47,10 @@ void printScore(Player *player)
     mvaddstr(0, 0, player->score_display);
 
     free(player->score_display);
+}
+
+void set_color(int color)
+{
+    init_pair(color, color, -1);
+    attrset(COLOR_PAIR(color));
 }

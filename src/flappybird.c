@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <locale.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -31,8 +32,11 @@ void inGame(int *random)
 {
     // Update the position of the bird and pipe in each iteration
     erase();
+    set_color(COLOR_WHITE);
     printScore(&player);
+    set_color(COLOR_YELLOW);
     printBird(&player);
+    set_color(COLOR_GREEN);
     printPipe(&pipes, pipes.pipeX, random, w);
     
     // Print the second pipe every time user passes the pipe
@@ -129,11 +133,17 @@ int main(int argc, char *argv[])
 
     // Set up the screen and keypad
     srand((unsigned int) time(NULL));
+    setlocale(LC_ALL, "");
     WINDOW *win = initscr();
     noecho();
     curs_set(0);
     keypad(win, true);
     nodelay(win, true);
+    if (can_change_color() == true)
+    {
+        start_color();
+        use_default_colors();
+    }
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 
     // Choose random numbers for first two pipes gaps
