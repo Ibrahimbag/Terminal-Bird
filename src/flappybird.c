@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     curs_set(0);
     keypad(win, true);
     nodelay(win, true);
-    if (can_change_color() == true)
+    if (has_colors() == true)
     {
         start_color();
         use_default_colors();
