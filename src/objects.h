@@ -10,8 +10,8 @@ Player;
 typedef struct Pipes
 {
     int pipeX;
-    int previouspipeX;
     int pipeupendY;
     int pipedownpeakY;
+    struct Pipes *next;
 }
 Pipes;

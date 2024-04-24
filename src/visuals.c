@@ -1,23 +1,26 @@
-#include <ncurses.h>
-#include <sys/ioctl.h>
-#include <stdlib.h>
-#include <math.h>
 #include "headers.h"
+#include <math.h>
+#include <ncurses.h>
+#include <stdlib.h>
+#include <sys/ioctl.h>
 
 // Print the pipes and the gaps
-void printPipe(Pipes *pipes, int pipeX, int *randompipe, struct winsize w)
+void printPipe(Pipes *head, int window_row_size, int window_collumn_size) 
 {
-    for (int i = 0; i < w.ws_row; i++)
+    Pipes *ptr = head;
+    while (ptr != NULL) 
     {
-        if (i == *randompipe)
+        for (int i = 0; i < window_row_size; i++) 
         {
-            mvaddstr(i, w.ws_col - pipeX - 1, "▟██▙");
-            pipes->pipeupendY = i;
-            i = i + 4;
-            mvaddstr(i, w.ws_col - pipeX - 1, "▜██▛");
-            pipes->pipedownpeakY = i;
+            if (i == ptr->pipeupendY) 
+            {
+                mvaddstr(i, window_collumn_size - ptr->pipeX - 1, "▟██▙");
+                i = i + 4;
+                mvaddstr(i, window_collumn_size - ptr->pipeX - 1, "▜██▛");
+            }
+            mvaddstr(i, window_collumn_size - ptr->pipeX, "██");
         }
-        mvaddstr(i, w.ws_col - pipeX, "██");
+        ptr = ptr->next;
     }
 }
 
@@ -29,7 +32,7 @@ void printBird(Player *player)
 }
 
 // Print player's current score in up left corner of the screen 
-void printScore(Player *player)
+void printScore(Pipes *head, Player *player)
 {
     // Get the length of the player's score
     int score_length;
@@ -41,6 +44,7 @@ void printScore(Player *player)
     {
         endwin();
         printf("Memory allocation error\n");
+        free_list(head);
         exit(EXIT_FAILURE);
     }
     snprintf(player->score_display, score_length + 1, "%d", player->score);
