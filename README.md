@@ -6,8 +6,8 @@ Player's objective is to navigate the bird through columns of pipes without coll
 ### Windows
 First, we have to install WSL. You can simply install WSL by following this YouTube tutorial: https://www.youtube.com/watch?v=wjbbl0TTMeo&t=416s 
 
-After installation, we can now install the required packages and dependencies to build our code by writing these commands to the shell: 
-```bash
+After installation, we can now install the required packages, dependencies and build our code by writing these commands to the shell: 
+```console
 $ sudo apt install git make clang libncurses5-dev libncursesw5-dev
 
 $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
@@ -22,7 +22,7 @@ To build our code, you need `git` `make` `clang` and `ncurses-dev` installed on 
 You can follow this tutorial to install ncurses: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/
 
 After installing all the required packages, we can now clone and build our code:
-```bash
+```console
 $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
 
 $ cd Flappy-Bird-In-C
@@ -32,13 +32,8 @@ $ make
 
 ## How to play
 To start the game, simply run the compiled binary:
-```bash
+```console
 $ ./flappybird
 ```
 
-Use **SPACE** key to fly, **Q** key to quit the game.
-
-Use the command down below to display debug panel while playing:
-```bash
-$ ./flappybird debug
-```
+Use <kbd>SPACE</kbd> key to fly, <kbd>Q</kbd> key to quit the game.

@@ -1,4 +1,5 @@
 #include "headers.h"
+#include <errno.h>
 #include <ncurses.h>
 #include <stdlib.h>
 
@@ -9,24 +10,24 @@ Pipes *first_node(Pipes *head, int random)
     if (starting_node == NULL)
     {
         endwin();
-        printf("Memory allocation error");
+        perror("Error");
         free_list(head);
         exit(EXIT_FAILURE);
     }
-    starting_node->pipeX = 3; 
-    starting_node->pipeupendY = random;
-    starting_node->pipedownpeakY = random + 4;
+    starting_node->pipe_x = 3; 
+    starting_node->pipe_top_end = random;
+    starting_node->pipe_bottom_peak = random + 4;
     starting_node->next = NULL;
 
     return starting_node;
 }
 
-bool new_pipe_spawnable(Pipes *head, int window_collumn_size)
+bool new_pipe_available(Pipes *head, int col_size)
 {
     Pipes *ptr = head;
     while (ptr != NULL)
     {
-        if (window_collumn_size - ptr->pipeX == window_collumn_size - 50)
+        if (col_size - ptr->pipe_x == col_size - 50)
         {
             return true;
         }
@@ -37,18 +38,18 @@ bool new_pipe_spawnable(Pipes *head, int window_collumn_size)
 
 void new_pipe(Pipes *head, int random)
 {
-    // Create the next node
+    // Create the next node 
     Pipes *end_node = malloc(sizeof(Pipes));
     if (end_node == NULL)
     {
         endwin();
-        printf("Memory allocation error");
+        perror("Error");
         free_list(head);
         exit(EXIT_FAILURE);
     }
-    end_node->pipeX = 3;
-    end_node->pipeupendY = random;
-    end_node->pipedownpeakY = random + 4;
+    end_node->pipe_x = 3;
+    end_node->pipe_top_end = random;
+    end_node->pipe_bottom_peak = random + 4;
     end_node->next = NULL;
     
     // Add the new node to the list
@@ -67,26 +68,32 @@ void new_pipe(Pipes *head, int random)
     }
 }
 
-void pipes_position_update(Pipes *head)
+void update_pipe_position(Pipes *head)
 {
     // Move the pipes to the left of the screen
     Pipes *ptr = head;
     while (ptr != NULL)
     {
-        ptr->pipeX++;
+        ptr->pipe_x++;
         ptr = ptr->next;
     }
 }
 
-bool pipe_collision_detection(Pipes *head, Player *player, int window_collumn_size) 
+bool bird_collided(Pipes *head, Player *player, int row_size, int col_size) 
 {
+    // Check if the bird has hit the ground
+    if (player->y == row_size - 1)
+    {
+        return true;
+    }
+
     // Check if the bird has hit the pipes. If so, return true; else increment player score and return false.
     Pipes *ptr = head;
     while (ptr != NULL) 
     {
-        if (window_collumn_size - ptr->pipeX == 20)
+        if (col_size - ptr->pipe_x == 20)
         {
-            if (player->birdY <= ptr->pipeupendY || player->birdY >= ptr->pipedownpeakY) 
+            if (player->y <= ptr->pipe_top_end || player->y >= ptr->pipe_bottom_peak) 
             {
                 return true;
             }
