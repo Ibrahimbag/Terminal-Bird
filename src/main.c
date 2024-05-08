@@ -10,9 +10,9 @@ static Player player;
 static Pipes *head = NULL;
 
 int get_random_position(void);
-void inGame(void);
-void endGame(void);
-bool checkterminalresolution(void);
+void update_game(void);
+void check_for_exit(void);
+bool check_terminal_resolution(void);
 
 int get_random_position(void)
 {
@@ -20,9 +20,9 @@ int get_random_position(void)
     return random_position;
 }
 
-void inGame()
+void update_game(void)
 {
-    // Everytime a pipe is in specific position, clone a new pipe heading to the left
+    // if pipe is in specific position, clone a new pipe heading to the left
     if (new_pipe_available(head, window_width)) 
     {
         new_pipe(head, get_random_position());
@@ -38,22 +38,23 @@ void inGame()
     set_color(COLOR_WHITE);
     draw_score(&player);
     refresh();
+    usleep(70000);
 
     // Update the position of pipes
     update_pipe_position(head);
-    usleep(70000);
 }
 
-void endGame(void)
+void check_for_exit(void)
 {
     // Check if terminal resolution is too small
-    if (checkterminalresolution())
+    if (check_terminal_resolution())
     {
         endwin();
         fprintf(stderr, "Terminal resolution too small. Minimun is 12x48.\n");
         free_list(head);
         exit(EXIT_FAILURE);
     }
+
     // Check if user wants to quit or has collided
     if (player.key == 'q' || player.key == 'Q' || bird_collided(head, &player, window_height, window_width))
     {
@@ -66,7 +67,7 @@ void endGame(void)
 }
 
 // Check if user is using small terminal
-bool checkterminalresolution(void)
+bool check_terminal_resolution(void)
 {
     if (window_height < 12 || window_width < 48)
     {
@@ -103,7 +104,7 @@ int main(void)
     {
         getmaxyx(win, window_height, window_width);
         player.key = getch();
-        inGame(); // Update the game
-        endGame();
+        update_game();
+        check_for_exit();
     }
 }

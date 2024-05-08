@@ -2,7 +2,6 @@
 #define HEADERS_H
 
 #include <ncurses.h>
-#include <stdbool.h>
 
 // Structs
 typedef struct Player_s
