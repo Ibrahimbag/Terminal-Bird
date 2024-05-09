@@ -23,7 +23,6 @@ typedef struct Pipe_s
 void draw_pipes(Pipes *head, int row_size, int col_size);
 void draw_bird(Player *player);
 void draw_score(Player *player);
-void set_color(int color);
 
 // Functions in pipe_nodes.c
 Pipes *first_node(Pipes *head, int random);

@@ -31,11 +31,11 @@ void update_game(void)
     // Print the game elements
     erase();
     attroff(A_BOLD);
-    set_color(COLOR_YELLOW);
+    attron(COLOR_PAIR(1));
     draw_bird(&player);
-    set_color(COLOR_GREEN);
+    attron(COLOR_PAIR(2));
     draw_pipes(head, window_height, window_width);
-    set_color(COLOR_WHITE);
+    attroff(COLOR_PAIR(2));
     draw_score(&player);
     refresh();
     usleep(70000);
@@ -92,6 +92,11 @@ int main(void)
         start_color();
         use_default_colors();
     }
+
+    // Color pairs to be used
+    init_pair(1, COLOR_YELLOW, -1); // Bird
+    init_pair(2, -1, COLOR_GREEN); // Rest of the pipes exclude the bottom of upper pipe, top of lower pipe.
+    init_pair(3, COLOR_GREEN, -1); // Bottom of upper pipe, top of lower pipe.
 
     // Get the size of the screen
     getmaxyx(win, window_height, window_width);

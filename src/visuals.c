@@ -11,11 +11,13 @@ void draw_pipes(Pipes *head, int row_size, int col_size)
         {
             if (i == ptr->pipe_top_end) 
             {
+                attron(COLOR_PAIR(3));
                 mvaddstr(i, col_size - ptr->pipe_x - 1, "▟██▙");
                 i += 4;
                 mvaddstr(i, col_size - ptr->pipe_x - 1, "▜██▛");
+                attron(COLOR_PAIR(2));
             }
-            mvaddstr(i, col_size - ptr->pipe_x, "██");
+            mvaddstr(i, col_size - ptr->pipe_x, "  ");
         }
         ptr = ptr->next;
     }
@@ -33,10 +35,4 @@ void draw_score(Player *player)
 {
     attron(A_BOLD);
     mvprintw(0, 0, "%d", player->score);
-}
-
-void set_color(int color)
-{
-    init_pair(color, color, -1);
-    attron(COLOR_PAIR(color));
 }
