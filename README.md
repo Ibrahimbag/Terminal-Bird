@@ -14,7 +14,7 @@ $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
 
 $ cd Flappy-Bird-In-C
 
-$ make
+$ sudo make install
 ```
 ### GNU/Linux
 To build our code, you need `git` `make` `clang` and `ncurses-dev` installed on your system.
@@ -27,13 +27,18 @@ $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
 
 $ cd Flappy-Bird-In-C
 
-$ make
+$ sudo make install
 ```
 
 ## How to play
 To start the game, simply run the compiled binary:
 ```console
-$ ./flappybird
+$ flappy-bird
 ```
-
 Use <kbd>SPACE</kbd> key to fly, <kbd>Q</kbd> key to quit the game.
+
+## Uninstall
+Make sure you cd to the Flappy-Bird-In-C folder and run the following command to the terminal:
+```console
+$ sudo make uninstall
+```
