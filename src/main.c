@@ -42,6 +42,9 @@ void update_game(void)
 
     // Update the position of pipes
     update_pipe_position(head);
+
+    // Free unused pipes that are out of the screen
+    free_list(head, GAME_ONGOING);
 }
 
 void check_for_exit(void)
@@ -51,7 +54,7 @@ void check_for_exit(void)
     {
         endwin();
         fprintf(stderr, "Terminal resolution too small. Minimun is 12x48.\n");
-        free_list(head);
+        free_list(head, GAME_OVER);
         exit(EXIT_FAILURE);
     }
 
@@ -61,7 +64,7 @@ void check_for_exit(void)
         usleep(400000);
         endwin();
         printf("Score: %d\n", player.score);
-        free_list(head);
+        free_list(head, GAME_OVER);
         exit(EXIT_SUCCESS);
     }
 }
