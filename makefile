@@ -1,5 +1,4 @@
-CC = clang
-CFLAGS = -O3 -std=c11 -Wall -Werror -Wpedantic -Wextra -g -D _DEFAULT_SOURCE
+CFLAGS = -O3 -std=c11 -Wall -Werror -Wpedantic -Wextra -g -D _DEFAULT_SOURCE -DNCURSES_STATIC
 BIN = flappy-bird
 PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games

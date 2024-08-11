@@ -8,7 +8,7 @@ First, we have to install WSL. You can simply install WSL by following this YouT
 
 After installation, we can now install the required packages, dependencies and build our code by writing these commands to the shell: 
 ```console
-$ sudo apt install git make clang libncurses5-dev libncursesw5-dev
+$ sudo apt install git make gcc libncurses5-dev libncursesw5-dev
 
 $ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
 
@@ -17,9 +17,13 @@ $ cd Flappy-Bird-In-C
 $ sudo make install
 ```
 ### GNU/Linux
-To build our code, you need `git` `make` `clang` and `ncurses-dev` installed on your system.
+To build our code, you need `git` `make` `ncurses-dev` and a compiler (such as `GCC`, `Clang` or etc) installed on your system.
 
-You can follow this tutorial to install ncurses: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/
+To install all required packages to build on Debian/Ubuntu or their derivatives, first run this command:
+```console
+$ sudo apt install git make gcc libncurses5-dev libncursesw5-dev
+```
+You can follow this tutorial to install ncurses on other distros: https://www.cyberciti.biz/faq/linux-install-ncurses-library-headers-on-debian-ubuntu-centos-fedora/
 
 After installing all the required packages, we can now clone and build our code:
 ```console
