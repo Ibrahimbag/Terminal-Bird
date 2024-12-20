@@ -43,12 +43,13 @@ int main(void)
     head = first_node(head, get_random_position());
 
     // Start the game
+    struct timespec remaining, request = {0, 70000000}; 
     while (!check_for_exit())
     {
         getmaxyx(win, window_height, window_width);
         player.key = getch();
-        game();        
-        usleep(70000);
+        game();       
+        nanosleep(&request, &remaining);
     }
 }
 
@@ -98,7 +99,7 @@ bool check_for_exit(void)
     // Check if user wants to quit or has collided
     if (player.key == 'q' || player.key == 'Q' || bird_collided(head, &player, window_height, window_width))
     {
-        usleep(400000);
+        sleep(2);
         endwin();
         printf("Score: %ld\n", player.score);
         free_list(head, GAME_OVER);
