@@ -82,7 +82,7 @@ void update_pipe_position(Pipes *head)
 bool bird_collided(Pipes *head, Player *player, int row_size, int col_size) 
 {
     // Check if the bird has hit the ground
-    if (player->y >= row_size - 1)
+    if (player->bird_y >= row_size - 1)
     {
         return true;
     }
@@ -93,7 +93,7 @@ bool bird_collided(Pipes *head, Player *player, int row_size, int col_size)
     {
         if (col_size - ptr->pipe_x == 20)
         {
-            if (player->y <= ptr->pipe_top_end || player->y >= ptr->pipe_bottom_peak) 
+            if (player->bird_y <= ptr->pipe_top_end || player->bird_y >= ptr->pipe_bottom_peak) 
             {
                 return true;
             }

@@ -1,14 +1,14 @@
 #ifndef HEADERS_H
 #define HEADERS_H
 
-#include <ncurses.h>
+#include <stdbool.h>
 
 // Structs
 typedef struct Player_s
 {
-    int y;
+    int bird_y;
     int key;
-    int score;
+    unsigned long score;
 } Player;
 
 typedef struct Pipe_s
