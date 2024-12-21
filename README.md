@@ -1,4 +1,4 @@
-# Flappy Bird in C
+# Terminal Bird
 A simple [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) clone written in the [C language](https://en.wikipedia.org/wiki/C_(programming_language)) with [ncurses library](https://en.wikipedia.org/wiki/Ncurses) for terminal-based graphics. 
 
 Player's objective is to navigate the bird through columns of pipes without colliding to them as much as possible.
@@ -10,9 +10,9 @@ After installation, we can now install the required packages, dependencies and b
 ```console
 $ sudo apt install git make gcc libncurses5-dev libncursesw5-dev
 
-$ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
+$ git clone https://github.com/Ibrahimbag/Terminal-Bird.git
 
-$ cd Flappy-Bird-In-C
+$ cd Terminal-Bird
 
 $ sudo make install
 ```
@@ -27,9 +27,9 @@ You can follow this tutorial to install ncurses on other distros: https://www.cy
 
 After installing all the required packages, we can now clone and build our code:
 ```console
-$ git clone https://github.com/Ibrahimbag/Flappy-Bird-In-C.git
+$ git clone https://github.com/Ibrahimbag/Terminal-Bird.git
 
-$ cd Flappy-Bird-In-C
+$ cd Terminal-Bird
 
 $ sudo make install
 ```
@@ -37,12 +37,12 @@ $ sudo make install
 ## How to play
 To start the game, simply run the compiled binary:
 ```console
-$ flappy-bird
+$ terminal-bird
 ```
 Use <kbd>SPACE</kbd> key to fly, <kbd>Q</kbd> key to quit the game.
 
 ## Uninstall
-Make sure you cd to the Flappy-Bird-In-C folder and run the following command to the terminal:
+Make sure you cd to the Terminal-Bird folder and run the following command to the terminal:
 ```console
 $ sudo make uninstall
 ```

@@ -1,5 +1,5 @@
 CFLAGS = -O3 -std=c11 -Wall -Werror -Wpedantic -Wextra -g -D _DEFAULT_SOURCE -DNCURSES_STATIC
-BIN = flappy-bird
+BIN = terminal-bird
 PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games
 LIBS = -lncursesw
@@ -11,7 +11,7 @@ OBJ = src/main.o src/pipe_nodes.o src/visuals.o
 		@echo "*** Creating object ***"
 		$(CC) -c -o $@ $< $(CFLAGS)
 
-flappy-bird: $(OBJ)
+${BIN}: $(OBJ)
 
 		@echo 
 		@echo "*** Building the executable file ***"
