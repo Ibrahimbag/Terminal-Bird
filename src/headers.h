@@ -23,8 +23,8 @@ typedef struct Pipe_s
 #define GAME_OVER 1
 
 // Functions in visuals.c
-void draw_pipes(Pipes *head, int row_size, int col_size);
 void draw_bird(Player *player);
+void draw_pipes(Pipes *head, int row_size, int col_size);
 void draw_score(Player *player);
 
 // Functions in pipe_nodes.c

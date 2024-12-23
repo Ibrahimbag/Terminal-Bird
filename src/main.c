@@ -69,12 +69,8 @@ void game(void)
 
     // Print the game elements
     erase();
-    attroff(A_BOLD);
-    attron(COLOR_PAIR(1));
     draw_bird(&player);
-    attron(COLOR_PAIR(2));
     draw_pipes(head, window_height, window_width);
-    attroff(COLOR_PAIR(2));
     draw_score(&player);
     refresh();
 
