@@ -38,5 +38,5 @@ uninstall:
 clean:
 
 		@echo "*** Cleaning up $(BIN) and $(OBJ) ***"
-		rm -f flappy-bird src/*.o
+		rm -f ${BIN} src/*.o
 		@echo "*** Cleaned ***"
