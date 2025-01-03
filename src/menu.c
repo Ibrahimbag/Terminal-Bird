@@ -41,9 +41,12 @@ void main_menu(int yMax, int xMax)
     };
 
     // Display menu items
-    size_t key, key_id = 0;
-    while(tolower((key = wgetch(win))) != 'q')
+    size_t key_id = 0;
+    while(true)
     {
+        // Get user input
+        int key = wgetch(win);
+
         // Control keys
         if (key == KEY_UP && key_id > 0) 
         {
@@ -80,6 +83,11 @@ void main_menu(int yMax, int xMax)
                 endwin();
                 exit(EXIT_SUCCESS);
             }
+        }
+        else if (tolower(key) == 'q')
+        {
+            endwin();
+            exit(EXIT_SUCCESS);
         }
     }
 }    
