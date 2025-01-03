@@ -1,0 +1,27 @@
+{
+    "General": {
+        "game_speed_multiplier": 1.00,
+        "show_score": true,
+        "menu_shown": true,
+        "jump_height": 2,
+        "gravity": 1
+    },
+    "Appearance": {
+        "bird_color": "yellow",
+        "pipe_color": "green",
+        "background_color": null
+    },
+    "Display": {
+        "auto_resize": true,
+        "resolution_x": "40",
+        "resolution_y": "20"
+    },
+    "Keybinds": {
+        "jump": " ",
+        "exit": "q",
+        "restart": "r",
+        "pause": "p"
+    },
+
+    "version": "2.0alpha.0"
+}

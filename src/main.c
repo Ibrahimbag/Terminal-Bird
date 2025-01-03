@@ -1,9 +1,9 @@
 #include "headers.h"
+#include <ctype.h>
 #include <locale.h>
 #include <ncurses.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h>
 
 static int window_height, window_width;
 static Player player;
@@ -31,13 +31,16 @@ int main(void)
         use_default_colors();
     }
 
+    // Get the window size
+    getmaxyx(win, window_height, window_width);
+
+    // Display the main menu
+    main_menu(window_height, window_width);
+
     // Color pairs to be used
     init_pair(1, COLOR_YELLOW, -1); // Bird
     init_pair(2, -1, COLOR_GREEN); // Rest of the pipes exclude the bottom of upper pipe, top of lower pipe.
     init_pair(3, COLOR_GREEN, -1); // Bottom of upper pipe, top of lower pipe.
-
-    // Get the size of the screen
-    getmaxyx(win, window_height, window_width);
 
     // Create the first pipe
     head = first_node(head, get_random_position());
@@ -92,15 +95,35 @@ bool check_for_exit(void)
         exit(EXIT_FAILURE);
     }
 
-    // Check if user wants to quit or has collided
-    if (player.key == 'q' || player.key == 'Q' || bird_collided(head, &player, window_height, window_width))
+    // Check if user wants to quit while game is running
+    if (tolower(player.key) == 'q')
     {
-        sleep(2);
-        endwin();
-        printf("Score: %ld\n", player.score);
         free_list(head, GAME_OVER);
-        exit(EXIT_SUCCESS);
+        endwin();
+        return true;
     }
+
+    // If bird collided to somewhere, display game over screen
+    else if (bird_collided(head, &player, window_height, window_width))
+    {
+        int ret = game_over_menu(window_height, window_width);
+        free_list(head, GAME_OVER);
+
+        if (ret == GAME_RESTART)
+        {
+            player.score = 0;
+            player.bird_y = window_height / 2;
+            head = first_node(head, get_random_position());
+            return false;
+        }
+        else if (ret == GAME_OVER)
+        {
+            endwin();
+            printf("Score: %lu\n", player.score);
+            return true;
+        }
+    }
+
     return false;
 }
 

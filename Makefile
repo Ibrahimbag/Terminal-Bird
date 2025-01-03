@@ -4,7 +4,7 @@ PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games
 LIBS = -lncursesw
 DEPS = src/headers.h
-OBJ = src/main.o src/pipe_nodes.o src/visuals.o
+OBJ = src/main.o src/pipe_nodes.o src/visuals.o src/menu.o
 
 %.o: %.c $(DEPS)
 
