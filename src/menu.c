@@ -3,6 +3,43 @@
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
+void leaderboard_menu(int yMax, int xMax)
+{
+    WINDOW *win = newwin(yMax, xMax, 0, 0);
+
+    box(win , 0 , 0);
+
+    char *message = "Leaderboards are not implemented yet.";
+    mvwprintw(win, yMax / 2, xMax / 2 - strlen(message) / 2, "%s", message);
+    message = "Press any key to return to the main menu.";
+    mvwprintw(win, yMax - 2, xMax / 2 - strlen(message) / 2, "%s", message);
+
+    wgetch(win);
+    wclear(win);
+    wrefresh(win);
+
+    delwin(win);
+}
+
+void options_menu(int yMax, int xMax)
+{
+    WINDOW *win = newwin(yMax, xMax, 0, 0);
+
+    box(win , 0 , 0);
+
+    char *message = "Options are not implemented yet.";
+    mvwprintw(win, yMax / 2, xMax / 2 - strlen(message) / 2, "%s", message);
+    message = "Press any key to return to the main menu.";
+    mvwprintw(win, yMax - 2, xMax / 2 - strlen(message) / 2, "%s", message);
+
+    wgetch(win);
+    wclear(win);
+    wrefresh(win);
+
+    delwin(win);
+}
 
 void main_menu(int yMax, int xMax)
 {   
@@ -11,7 +48,7 @@ void main_menu(int yMax, int xMax)
     nodelay(win, true);
     keypad(win, true);
 
-    // Print menu title
+    // Menu title
     char *menu_title[] = {
         " _____                   _             _ \n",
         "|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n",
@@ -27,11 +64,6 @@ void main_menu(int yMax, int xMax)
     size_t n = sizeof(menu_title) / sizeof(menu_title[0]);
     int menu_title_half_width = 40 / 2;
 
-    for (size_t i = 0; i < n; i++) {
-        mvwaddstr(win, i + 1, xMax / 2 - menu_title_half_width, menu_title[i]);
-    }
-    box(win, 0, 0);
-
     // Define menu items
     char *menu_items[] = {
         "Start",
@@ -41,24 +73,35 @@ void main_menu(int yMax, int xMax)
     };
 
     // Display menu items
-    size_t key_id = 0;
+    int key_id = 0;
     while(true)
     {
         // Get user input
         int key = wgetch(win);
 
         // Control keys
-        if (key == KEY_UP && key_id > 0) 
+        if (key == KEY_UP) 
         {
             key_id--;
         }
-        else if (key == KEY_DOWN && key_id < sizeof(menu_items) / sizeof(menu_items[0]) - 1)
+        else if (key == KEY_DOWN)
         {
             key_id++;
         }
 
+        // Wrap key_id within the valid range
+        int num_menu_items = sizeof(menu_items) / sizeof(menu_items[0]);
+        key_id = (key_id + num_menu_items) % num_menu_items;
+
+        // Print menu title
+        box(win, 0, 0);
+        for (size_t i = 0; i < n; i++) 
+        {
+            mvwaddstr(win, i + 1, xMax / 2 - menu_title_half_width, menu_title[i]);
+        }
+
         // Print menu items
-        for (size_t i = 0; i < sizeof(menu_items) / sizeof(menu_items[0]); i++)
+        for (int i = 0; i < (int) sizeof(menu_items) / (int) sizeof(menu_items[0]); i++)
         {
             if (key_id == i)
             {
@@ -74,14 +117,20 @@ void main_menu(int yMax, int xMax)
 
         if (key == '\n')
         {
-            if (key_id == 0)
+            switch (key_id)
             {
-                return;
-            }
-            else if (key_id == 3)
-            {            
-                endwin();
-                exit(EXIT_SUCCESS);
+                case 0:
+                    delwin(win);
+                    return;
+                case 1:
+                    leaderboard_menu(yMax, xMax);
+                    break;
+                case 2:
+                    options_menu(yMax, xMax);
+                    break;
+                default:
+                    endwin();
+                    exit(EXIT_SUCCESS);
             }
         }
         else if (tolower(key) == 'q')
@@ -89,7 +138,7 @@ void main_menu(int yMax, int xMax)
             endwin();
             exit(EXIT_SUCCESS);
         }
-    }
+    } 
 }    
 
 int game_over_menu(int yMax, int xMax)
@@ -131,10 +180,12 @@ int game_over_menu(int yMax, int xMax)
 
         if (tolower(key) == 'q')
         {
+            delwin(win);
             return GAME_OVER;
         }
         else if (tolower(key) == 'r')
         {
+            delwin(win);
             return GAME_RESTART;
         }
     }
