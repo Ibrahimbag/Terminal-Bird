@@ -1,4 +1,5 @@
 #include "headers.h"
+#include "leaderboard_db.h"
 #include <ctype.h>
 #include <locale.h>
 #include <ncurses.h>
@@ -30,6 +31,9 @@ int main(void)
         start_color();
         use_default_colors();
     }
+
+    // Initialize leaderboard database
+    db_execute(CREATE, NULL, -1);
 
     // Get the window size
     getmaxyx(win, window_height, window_width);
@@ -106,7 +110,7 @@ bool check_for_exit(void)
     // If bird collided to somewhere, display game over screen
     else if (bird_collided(head, &player, window_height, window_width))
     {
-        int ret = game_over_menu(window_height, window_width);
+        int ret = game_over_menu(window_height, window_width, player.score);
         free_list(head, GAME_OVER);
 
         if (ret == GAME_RESTART)

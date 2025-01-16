@@ -1,4 +1,5 @@
 #include "headers.h"
+#include "leaderboard_db.h"
 #include <ctype.h>
 #include <ncurses.h>
 #include <stdio.h>
@@ -8,18 +9,28 @@
 void leaderboard_menu(int yMax, int xMax)
 {
     WINDOW *win = newwin(yMax, xMax, 0, 0);
+    box(win, 0, 0);
 
-    box(win , 0 , 0);
+    leaderboards *leaderboard = db_execute(SELECT, NULL, -1);
+    if (leaderboard == NULL) 
+    {
+        return;
+    }
 
-    char *message = "Leaderboards are not implemented yet.";
-    mvwprintw(win, yMax / 2, xMax / 2 - strlen(message) / 2, "%s", message);
-    message = "Press any key to return to the main menu.";
-    mvwprintw(win, yMax - 2, xMax / 2 - strlen(message) / 2, "%s", message);
+    mvwprintw(win, 1, xMax / 2 - strlen("Leaderboard Score") / 2, "Leaderboard Score");
+    for (int i = 0; i < 30; i++) 
+    {
+    	if (leaderboard[i].name != NULL && i < yMax - 3) 
+        {
+    		mvwprintw(win, i + 2, xMax / 2 - strlen("Leaderboard Score") / 2, "%s          %d", leaderboard[i].name, leaderboard[i].score);
+    	}
+    }
 
-    wgetch(win);
+    while(tolower(wgetch(win)) != 'q') {}
     wclear(win);
     wrefresh(win);
 
+    free_leaderboard(leaderboard);
     delwin(win);
 }
 
@@ -84,7 +95,7 @@ void main_menu(int yMax, int xMax)
         {
             key_id--;
         }
-        else if (key == KEY_DOWN)
+        else if (key == KEY_DOWN)   
         {
             key_id++;
         }
@@ -94,11 +105,11 @@ void main_menu(int yMax, int xMax)
         key_id = (key_id + num_menu_items) % num_menu_items;
 
         // Print menu title
-        box(win, 0, 0);
         for (size_t i = 0; i < n; i++) 
         {
             mvwaddstr(win, i + 1, xMax / 2 - menu_title_half_width, menu_title[i]);
         }
+        box(win, 0, 0);
 
         // Print menu items
         for (int i = 0; i < (int) sizeof(menu_items) / (int) sizeof(menu_items[0]); i++)
@@ -141,11 +152,40 @@ void main_menu(int yMax, int xMax)
     } 
 }    
 
-int game_over_menu(int yMax, int xMax)
+int game_over_menu(int yMax, int xMax, int score)
 {
     // Create a window for the game over screen
     WINDOW *win = newwin(yMax / 2, xMax / 2,  yMax / 4, xMax / 4);
     keypad(win, true);
+
+    // Prompt user if they want to save their score to leaderboard
+    char *message = "Save score to the leaderboard? [Y/N]";
+    box(win, 0, 0);
+    mvwprintw(win, yMax / 4, xMax / 4 - strlen(message) / 2, "%s", message);
+
+    int key;
+    do
+    {
+        key = tolower(wgetch(win));
+    } while(key != 'y' && key != 'n');
+    
+    wclear(win);
+    wrefresh(win);
+
+    // Get user input and save it to leaderboard
+    if (tolower(key) == 'y') 
+    {
+        char name[20];
+        message = "Name: ";
+        box(win, 0, 0);
+        mvwaddstr(win, yMax / 4, xMax / 4 - strlen(message) / 2, message);
+        echo();
+        mvwgetnstr(win, yMax / 4, xMax / 4 + strlen(message) / 2, name, 20);
+        noecho();
+        db_execute(INSERT, name, score);
+        wclear(win);
+        wrefresh(win);
+    }
 
     // Print game over title
     char *game_over_title[] = {

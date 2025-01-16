@@ -14,7 +14,7 @@ $ git clone https://github.com/Ibrahimbag/Terminal-Bird.git
 
 $ cd Terminal-Bird
 
-$ sudo make install
+$ make && sudo make install
 ```
 ### GNU/Linux
 To build our code, you need `git` `make` `ncurses-dev` and a compiler (such as `GCC`, `Clang` or etc) installed on your system.
@@ -31,7 +31,7 @@ $ git clone https://github.com/Ibrahimbag/Terminal-Bird.git
 
 $ cd Terminal-Bird
 
-$ sudo make install
+$ make && sudo make install
 ```
 
 ## How to play
@@ -44,5 +44,5 @@ Use <kbd>SPACE</kbd> key to fly, <kbd>Q</kbd> key to quit the game.
 ## Uninstall
 Make sure you cd to the Terminal-Bird folder and run the following command to the terminal:
 ```console
-$ sudo make uninstall
+$ make clean && sudo make uninstall
 ```

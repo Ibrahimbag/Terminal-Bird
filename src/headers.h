@@ -38,6 +38,6 @@ void free_list(Pipes *head, int status);
 
 // menu.c
 void main_menu(int yMax, int xMax);
-int game_over_menu(int yMax, int xMax);
+int game_over_menu(int yMax, int xMax, int score);
 
 #endif

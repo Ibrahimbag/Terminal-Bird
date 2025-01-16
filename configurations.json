@@ -21,7 +21,5 @@
         "exit": "q",
         "restart": "r",
         "pause": "p"
-    },
-
-    "version": "2.0.0-a.3"
+    }
 }
