@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 void leaderboard_menu(int yMax, int xMax)
 {
@@ -85,6 +86,7 @@ void main_menu(int yMax, int xMax)
 
     // Display menu items
     int key_id = 0;
+    struct timespec remaining, request = {0, 70000000};
     while(true)
     {
         // Get user input
@@ -149,6 +151,9 @@ void main_menu(int yMax, int xMax)
             endwin();
             exit(EXIT_SUCCESS);
         }
+
+        // This is added to fix high cpu usage
+        nanosleep(&request, &remaining);
     } 
 }    
 
