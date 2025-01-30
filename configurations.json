@@ -7,19 +7,18 @@
         "gravity": 1
     },
     "Appearance": {
-        "bird_color": "yellow",
-        "pipe_color": "green",
-        "background_color": null
+        "bird_color": 3,
+        "pipe_color": 2,
+        "background_color": -1
     },
     "Display": {
         "auto_resize": true,
-        "resolution_x": "40",
-        "resolution_y": "20"
+        "height": 24,
+        "width": 80
     },
     "Keybinds": {
         "jump": " ",
         "exit": "q",
-        "restart": "r",
-        "pause": "p"
+        "restart": "r"
     }
 }

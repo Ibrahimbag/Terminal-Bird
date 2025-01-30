@@ -1,11 +1,26 @@
+#include "configuration.h"
 #include "headers.h"
 #include <ncurses.h>
 
 // Controlling of the bird
 void draw_bird(Player *player)
 {
+    Configurations config = configuration();
+
+    int jump_height = config.jump_height;
+    if (jump_height < 1 || jump_height > 5)
+    {
+        jump_height = 2;
+    }
+
+    int gravity = config.gravity;
+    if (gravity < 1 || gravity > 5)
+    {
+        gravity = 1;
+    }
+
     attron(COLOR_PAIR(1));
-    (player->key == ' ') ? (player->bird_y -= 2) : (player->bird_y++);
+    (player->key == ' ') ? (player->bird_y -= jump_height) : (player->bird_y += gravity);
     mvaddstr(player->bird_y, 19, "██");
     attroff(COLOR_PAIR(1));
 }

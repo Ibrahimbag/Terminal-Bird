@@ -1,3 +1,4 @@
+#include "configuration.h"
 #include "headers.h"
 #include "leaderboard_db.h"
 #include <ctype.h>
@@ -41,8 +42,12 @@ void options_menu(int yMax, int xMax)
 
     box(win , 0 , 0);
 
-    char *message = "Options are not implemented yet.";
+    char *message = "This menu is not implemented yet.";
     mvwprintw(win, yMax / 2, xMax / 2 - strlen(message) / 2, "%s", message);
+    message = "Edit the configuration file to change the settings";
+    mvwprintw(win, yMax / 2 + 1, xMax / 2 - strlen(message) / 2, "%s", message);
+    message = "located at ~/.Terminal-Bird/configurations.json";
+    mvwprintw(win, yMax / 2 + 2, xMax / 2 - strlen(message) / 2, "%s", message);
     message = "Press any key to return to the main menu.";
     mvwprintw(win, yMax - 2, xMax / 2 - strlen(message) / 2, "%s", message);
 
@@ -213,22 +218,40 @@ int game_over_menu(int yMax, int xMax, int score)
     }
     box(win, 0, 0);
 
+    // Get keybinds for exit and restart
+    Configurations config = configuration();
+
+    int exit_key = toupper(config.exit);
+    if (exit_key == ' ')
+    {
+        exit_key = 'Q';
+    }
+
+    int restart_key = toupper(config.restart);
+    if (restart_key == ' ')
+    {
+        restart_key = 'R';
+    }
+
     // Print game over message
     getmaxyx(win, yMax, xMax);
-    mvwaddstr(win, yMax - 2, xMax / 8, "Exit [Q]");
-    mvwaddstr(win, yMax - 2, xMax / 2 + xMax / 8, "Restart [R]");
+    mvwprintw(win, yMax - 2, xMax / 8, "Exit [%c]", exit_key);
+    mvwprintw(win, yMax - 2, xMax / 2 + xMax / 8, "Restart [%c]", restart_key);
+
+    exit_key = tolower(exit_key);
+    restart_key = tolower(restart_key);
 
     // Wait for user input
     while(true)
     {
         int key = wgetch(win);
 
-        if (tolower(key) == 'q')
+        if (tolower(key) == exit_key)
         {
             delwin(win);
             return GAME_OVER;
         }
-        else if (tolower(key) == 'r')
+        else if (tolower(key) == restart_key)
         {
             delwin(win);
             return GAME_RESTART;

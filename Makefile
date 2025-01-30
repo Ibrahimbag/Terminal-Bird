@@ -2,9 +2,9 @@ CFLAGS = -O3 -std=c11 -Wall -Werror -Wpedantic -Wextra -g -D _DEFAULT_SOURCE -DN
 BIN = terminal-bird
 PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games
-LIBS = -lncursesw -lsqlite3
-DEPS = src/headers.h src/leaderboard_db.h
-OBJ = src/main.o src/pipe_nodes.o src/visuals.o src/menu.o src/leaderboard_db.o
+LIBS = -lncursesw -lsqlite3 -lcjson
+DEPS = src/configuration.h src/headers.h src/leaderboard_db.h
+OBJ = src/main.o src/pipe_nodes.o src/visuals.o src/menu.o src/leaderboard_db.o src/configuration.o
 HOME_DIR := $(shell echo ~$(SUDO_USER))
 
 %.o: %.c $(DEPS)
@@ -17,6 +17,7 @@ ${BIN}: $(OBJ)
 		@echo
 		@echo "*** Creating directory $(HOME_DIR)/.Terminal-Bird ***"
 		mkdir -p $(HOME_DIR)/.Terminal-Bird
+		cp configurations.json $(HOME_DIR)/.Terminal-Bird
 		@echo "*** Building the executable file ***"
 		$(CC) -o $@ $(OBJ) $(CFLAGS) $(LIBS)
 
