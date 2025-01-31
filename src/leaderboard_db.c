@@ -1,5 +1,7 @@
 /* https://www.tutorialspoint.com/sqlite/sqlite_c_cpp.htm */
+#define _POSIX_C_SOURCE 1
 #include "leaderboard_db.h"
+#include <limits.h>
 #include <sqlite3.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,7 +44,7 @@ leaderboards *db_execute(int operation_type, char *name, int score)
     char *zErrMsg = 0, *sql = NULL;
     int rc;
 
-    char path[263];
+    char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/.Terminal-Bird/leaderboards.db", getenv("HOME"));
     rc = sqlite3_open(path, &db);
 

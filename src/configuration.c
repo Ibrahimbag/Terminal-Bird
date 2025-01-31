@@ -1,5 +1,7 @@
+#define _POSIX_C_SOURCE 1
 #include "configuration.h"
 #include <cjson/cJSON.h>
+#include <limits.h>
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +13,8 @@ static char *get_json_string(void)
     FILE *fp = NULL;
     char *json_string = NULL;
 
-    char path[263];
+    // Get the path to the configuration file
+    char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/.Terminal-Bird/configurations.json", getenv("HOME"));
 
     fp = fopen (path,"r");
