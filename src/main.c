@@ -20,6 +20,13 @@ bool check_terminal_resolution(void);
 
 int main(void)
 {
+    // Exit from the game if user runned it as root
+    if (getuid() == 0)
+    {
+        fprintf(stderr, "Do not run this game as root.\n");
+        exit(EXIT_FAILURE);
+    }
+
     // Initialize random seed
     srand((unsigned int) time(NULL));
     
