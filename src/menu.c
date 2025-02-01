@@ -19,12 +19,13 @@ void leaderboard_menu(int yMax, int xMax)
         return;
     }
 
-    mvwprintw(win, 1, xMax / 2 - strlen("Leaderboard Score") / 2, "Leaderboard Score");
+    mvwprintw(win, 1, xMax / 2 - strlen("Leaderboard") / 2, "Leaderboard");
     for (int i = 0; i < 30; i++) 
     {
     	if (leaderboard[i].name != NULL && i < yMax - 3) 
         {
-    		mvwprintw(win, i + 2, xMax / 2 - strlen("Leaderboard Score") / 2, "%s          %d", leaderboard[i].name, leaderboard[i].score);
+    		mvwprintw(win, i + 2, 5, "%s", leaderboard[i].name);
+            mvwprintw(win, i + 2, xMax - 10, "%d", leaderboard[i].score);
     	}
     }
 
