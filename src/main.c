@@ -13,10 +13,10 @@ static Player player;
 static Pipes *head = NULL;
 static Configurations config;
 
-int get_random_position(void);
-void game(void);
-bool check_for_exit(void);
-bool check_terminal_resolution(void);
+static int get_random_position(void);
+static void game(void);
+static bool check_for_exit(void);
+static bool check_terminal_resolution(void);
 
 int main(void)
 {
@@ -102,13 +102,13 @@ int main(void)
     }
 }
 
-int get_random_position(void)
+static int get_random_position(void)
 {
     int random_position = rand() % (window_height - 6) + 1;
     return random_position;
 }
 
-void game(void)
+static void game(void)
 {
     // if pipe is in specific position, clone a new pipe heading to the left
     if (new_pipe_available(head, window_width)) 
@@ -133,7 +133,7 @@ void game(void)
     free_list(head, GAME_ONGOING);
 }
 
-bool check_for_exit(void)
+static bool check_for_exit(void)
 {
     // Check if terminal resolution is too small
     if (check_terminal_resolution())
@@ -184,7 +184,7 @@ bool check_for_exit(void)
 }
 
 // Check if user is using small terminal
-bool check_terminal_resolution(void)
+static bool check_terminal_resolution(void)
 {
     if (window_height < 12 || window_width < 48)
     {

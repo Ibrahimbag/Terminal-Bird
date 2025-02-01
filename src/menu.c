@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-void leaderboard_menu(int yMax, int xMax)
+static void leaderboard_menu(int yMax, int xMax)
 {
     WINDOW *win = newwin(yMax, xMax, 0, 0);
     box(win, 0, 0);
@@ -37,7 +37,7 @@ void leaderboard_menu(int yMax, int xMax)
     delwin(win);
 }
 
-void options_menu(int yMax, int xMax)
+static void options_menu(int yMax, int xMax)
 {
     WINDOW *win = newwin(yMax, xMax, 0, 0);
 
