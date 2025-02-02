@@ -21,6 +21,7 @@ typedef struct Pipe_s
 
 #define GAME_ONGOING 0
 #define GAME_OVER 1
+#define GAME_RESTART 2
 
 // Functions in visuals.c
 void draw_bird(Player *player);
@@ -34,5 +35,9 @@ void new_pipe(Pipes *head, int random);
 void update_pipe_position(Pipes *head);
 bool bird_collided(Pipes *head, Player *player, int row_size, int col_size);
 void free_list(Pipes *head, int status);
+
+// menu.c
+void main_menu(int yMax, int xMax);
+int game_over_menu(int yMax, int xMax, int score);
 
 #endif

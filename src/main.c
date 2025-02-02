@@ -1,4 +1,7 @@
+#include "configuration.h"
 #include "headers.h"
+#include "leaderboard_db.h"
+#include <ctype.h>
 #include <locale.h>
 #include <ncurses.h>
 #include <stdlib.h>
@@ -8,14 +11,22 @@
 static int window_height, window_width;
 static Player player;
 static Pipes *head = NULL;
+static Configurations config;
 
-int get_random_position(void);
-void game(void);
-bool check_for_exit(void);
-bool check_terminal_resolution(void);
+static int get_random_position(void);
+static void game(void);
+static bool check_for_exit(void);
+static bool check_terminal_resolution(void);
 
 int main(void)
 {
+    // Exit from the game if user runned it as root
+    if (getuid() == 0)
+    {
+        fprintf(stderr, "Do not run this game as root.\n");
+        exit(EXIT_FAILURE);
+    }
+
     // Initialize random seed
     srand((unsigned int) time(NULL));
     
@@ -31,18 +42,56 @@ int main(void)
         use_default_colors();
     }
 
-    // Color pairs to be used
-    init_pair(1, COLOR_YELLOW, -1); // Bird
-    init_pair(2, -1, COLOR_GREEN); // Rest of the pipes exclude the bottom of upper pipe, top of lower pipe.
-    init_pair(3, COLOR_GREEN, -1); // Bottom of upper pipe, top of lower pipe.
+    // Initialize leaderboard database
+    db_execute(CREATE, NULL, -1);
 
-    // Get the size of the screen
-    getmaxyx(win, window_height, window_width);
+    // Get all of the configurations
+    config = configuration();
+
+    // Get the window size
+    config.auto_resize ? getmaxyx(win, window_height, window_width) : (window_height = config.height, window_width = config.width);
+
+    // Display the main menu
+    if (config.menu_shown)
+        main_menu(window_height, window_width);
+
+    // Color pairs to be used
+    int bird_color = config.bird_color;
+    if (bird_color < COLOR_BLACK || bird_color > COLOR_WHITE)
+    {
+        bird_color = COLOR_YELLOW;
+    }
+
+    int pipe_color = config.pipe_color;
+    if (pipe_color < COLOR_BLACK || pipe_color > COLOR_WHITE)
+    {
+        pipe_color = COLOR_GREEN;
+    }
+
+    int background_color = config.background_color;
+
+    init_pair(1, bird_color, -1); // Bird
+    init_pair(2, -1, pipe_color); // Rest of the pipes exclude the bottom of upper pipe, top of lower pipe.
+    if (!(background_color < COLOR_BLACK) || !(background_color > COLOR_WHITE))
+    {
+        init_pair(3, pipe_color, background_color); // Bottom of upper pipe, top of lower pipe.
+        init_pair(4, -1, background_color);
+    }
+    else
+    {
+        init_pair(3, pipe_color, -1); // Bottom of upper pipe, top of lower pipe.
+    }
 
     // Create the first pipe
     head = first_node(head, get_random_position());
 
     // Start the game
+    float game_speed = config.game_speed_multiplier;
+    if (game_speed < 0.1 || game_speed > 10)
+    {
+        game_speed = 1.00;
+    }
+
     struct timespec remaining, request = {0, 70000000}; 
     while (!check_for_exit())
     {
@@ -53,13 +102,13 @@ int main(void)
     }
 }
 
-int get_random_position(void)
+static int get_random_position(void)
 {
     int random_position = rand() % (window_height - 6) + 1;
     return random_position;
 }
 
-void game(void)
+static void game(void)
 {
     // if pipe is in specific position, clone a new pipe heading to the left
     if (new_pipe_available(head, window_width)) 
@@ -69,9 +118,12 @@ void game(void)
 
     // Print the game elements
     erase();
+    bkgd(COLOR_PAIR(4));
     draw_bird(&player);
     draw_pipes(head, window_height, window_width);
-    draw_score(&player);
+    bool show_score = config.show_score;
+    if (show_score)
+        draw_score(&player);
     refresh();
 
     // Update the position of pipes
@@ -81,7 +133,7 @@ void game(void)
     free_list(head, GAME_ONGOING);
 }
 
-bool check_for_exit(void)
+static bool check_for_exit(void)
 {
     // Check if terminal resolution is too small
     if (check_terminal_resolution())
@@ -92,20 +144,47 @@ bool check_for_exit(void)
         exit(EXIT_FAILURE);
     }
 
-    // Check if user wants to quit or has collided
-    if (player.key == 'q' || player.key == 'Q' || bird_collided(head, &player, window_height, window_width))
+    // Check if user wants to quit while game is running
+    int exit_key = tolower(config.exit);
+    if (tolower(player.key) == exit_key)
     {
-        sleep(2);
-        endwin();
-        printf("Score: %ld\n", player.score);
         free_list(head, GAME_OVER);
-        exit(EXIT_SUCCESS);
+        endwin();
+        return true;
     }
+
+    // If bird collided to somewhere, display game over screen
+    else if (bird_collided(head, &player, window_height, window_width))
+    {
+        int ret = GAME_OVER;
+        if (config.menu_shown)
+            ret = game_over_menu(window_height, window_width, player.score);
+        else
+            sleep(3);
+
+        free_list(head, GAME_OVER);
+
+        if (ret == GAME_RESTART)
+        {
+            player.score = 0;
+            player.bird_y = window_height / 2;
+            head = first_node(head, get_random_position());
+            return false;
+        }
+        else if (ret == GAME_OVER)
+        {
+            endwin();
+            if (!config.menu_shown)
+                printf("Score: %lu\n", player.score);
+            return true;
+        }
+    }
+
     return false;
 }
 
 // Check if user is using small terminal
-bool check_terminal_resolution(void)
+static bool check_terminal_resolution(void)
 {
     if (window_height < 12 || window_width < 48)
     {

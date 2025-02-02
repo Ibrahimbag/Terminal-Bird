@@ -1,0 +1,24 @@
+{
+    "General": {
+        "game_speed_multiplier": 1.00,
+        "show_score": true,
+        "menu_shown": true,
+        "jump_height": 2,
+        "gravity": 1
+    },
+    "Appearance": {
+        "bird_color": 3,
+        "pipe_color": 2,
+        "background_color": -1
+    },
+    "Display": {
+        "auto_resize": true,
+        "height": 24,
+        "width": 80
+    },
+    "Keybinds": {
+        "jump": " ",
+        "exit": "q",
+        "restart": "r"
+    }
+}
