@@ -92,6 +92,7 @@ void main_menu(int yMax, int xMax)
 
     // Display menu items
     int key_id = 0;
+    int exit_key = configuration().exit;
     struct timespec remaining, request = {0, 70000000};
     while(true)
     {
@@ -152,7 +153,7 @@ void main_menu(int yMax, int xMax)
                     exit(EXIT_SUCCESS);
             }
         }
-        else if (tolower(key) == 'q')
+        else if (tolower(key) == exit_key)
         {
             endwin();
             exit(EXIT_SUCCESS);
