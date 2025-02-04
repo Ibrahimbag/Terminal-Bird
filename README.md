@@ -1,3 +1,6 @@
+![Video Demo](demo.gif) \
+Terminal used in the gif: [cool-retro-term](https://github.com/Swordfish90/cool-retro-term)
+
 # Terminal Bird
 A simple [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) clone written in the [C language](https://en.wikipedia.org/wiki/C_(programming_language)) with [ncurses library](https://en.wikipedia.org/wiki/Ncurses) for [terminal-based graphics](https://en.wikipedia.org/wiki/Text-based_user_interface). 
 
