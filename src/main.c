@@ -87,15 +87,17 @@ int main(void)
 
     // Start the game
     float game_speed = config.game_speed_multiplier;
+
     if (game_speed < 0.1 || game_speed > 10)
     {
         game_speed = 1.00;
     }
 
-    struct timespec remaining, request = {0, 70000000}; 
+    struct timespec remaining, request = {0, 70000000 / game_speed}; 
     while (!check_for_exit())
     {
-        getmaxyx(win, window_height, window_width);
+        if (config.auto_resize)
+            getmaxyx(win, window_height, window_width);
         player.key = getch();
         game();       
         nanosleep(&request, &remaining);
