@@ -1,6 +1,6 @@
 #include "configuration.h"
-#include "headers.h"
 #include "leaderboard_db.h"
+#include "menu.h"
 #include <ctype.h>
 #include <ncurses.h>
 #include <stdio.h>

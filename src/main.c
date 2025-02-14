@@ -1,6 +1,8 @@
 #include "configuration.h"
-#include "headers.h"
 #include "leaderboard_db.h"
+#include "menu.h"
+#include "pipe_nodes.h"
+#include "visuals.h"
 #include <ctype.h>
 #include <locale.h>
 #include <ncurses.h>

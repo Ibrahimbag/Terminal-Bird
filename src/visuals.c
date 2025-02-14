@@ -1,5 +1,5 @@
 #include "configuration.h"
-#include "headers.h"
+#include "visuals.h"
 #include <ncurses.h>
 
 // Controlling of the bird

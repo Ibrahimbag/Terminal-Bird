@@ -3,7 +3,7 @@ BIN = terminal-bird
 PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games
 LIBS = -lncursesw -lsqlite3 -lcjson
-DEPS = src/configuration.h src/headers.h src/leaderboard_db.h
+DEPS = src/common.h src/configuration.h src/leaderboard_db.h src/menu.h src/pipe_nodes.h src/visuals.h 
 OBJ = src/main.o src/pipe_nodes.o src/visuals.o src/menu.o src/leaderboard_db.o src/configuration.o
 HOME_DIR := $(shell echo ~$(SUDO_USER))
 

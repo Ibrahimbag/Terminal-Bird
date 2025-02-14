@@ -1,4 +1,4 @@
-#include "headers.h"
+#include "pipe_nodes.h"
 #include <errno.h>
 #include <ncurses.h>
 #include <stdlib.h>
