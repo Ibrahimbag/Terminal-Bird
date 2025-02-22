@@ -4,7 +4,7 @@ Terminal used in the gif: [cool-retro-term](https://github.com/Swordfish90/cool-
 # Terminal Bird 🐦
 A simple [Flappy Bird](https://en.wikipedia.org/wiki/Flappy_Bird) clone written in the [C language](https://en.wikipedia.org/wiki/C_(programming_language)) with [ncurses library](https://en.wikipedia.org/wiki/Ncurses) for [terminal-based graphics](https://en.wikipedia.org/wiki/Text-based_user_interface). 
 
-Player's objective is to navigate the bird through columns of pipes without colliding to them as much as possible.
+Player's objective is to navigate the bird through columns of pipes (not to be confused with [UNIX pipes](https://en.wikipedia.org/wiki/Pipeline_(Unix))) without colliding to them as much as possible.
 ## Installation ⬇️
 ### Windows 🪟
 First, we have to install [WSL](https://learn.microsoft.com/en-us/windows/wsl/about). You can simply install WSL by following this [YouTube tutorial](https://www.youtube.com/watch?v=wjbbl0TTMeo&t=416s) 
