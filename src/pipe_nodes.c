@@ -11,7 +11,7 @@ Pipes *first_node(Pipes *head, int random)
     {
         endwin();
         perror("Error");
-        free_list(head, GAME_OVER);
+        free_list(&head, GAME_OVER, -1);
         exit(EXIT_FAILURE);
     }
     starting_node->pipe_x = 3; 
@@ -44,7 +44,7 @@ void new_pipe(Pipes *head, int random)
     {
         endwin();
         perror("Error");
-        free_list(head, GAME_OVER);
+        free_list(&head, GAME_OVER, -1);
         exit(EXIT_FAILURE);
     }
     end_node->pipe_x = 3;
@@ -105,20 +105,20 @@ bool bird_collided(Pipes *head, Player *player, int row_size, int col_size)
     return false;
 }
 
-void free_list(Pipes *head, int status) 
+void free_list(Pipes **head, int status, int col_size) 
 {
     // If game is still ongoing, free the nodes in the list that is unused if there is any. 
     // If the game is over, free all the nodes in the list.
-    if (status == GAME_ONGOING && head->pipe_x < -3)
+    if (status == GAME_ONGOING && (*head)->pipe_x > col_size + 3 && (*head)->next != NULL)
     {
         Pipes *next;
-        next = head->next;
-        free(head);
-        head = next;
+        next = (*head)->next;
+        free(*head);
+        *head = next;
     }
     else if (status == GAME_OVER)
     {
-        Pipes *ptr = head, *next;
+        Pipes *ptr = *head, *next;
         while (ptr != NULL) 
         {
             next = ptr->next;

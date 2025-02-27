@@ -134,7 +134,7 @@ static void game(void)
     update_pipe_position(head);
 
     // Free unused pipes that are out of the screen
-    free_list(head, GAME_ONGOING);
+    free_list(&head, GAME_ONGOING, window_width);
 }
 
 static bool check_for_exit(void)
@@ -144,7 +144,7 @@ static bool check_for_exit(void)
     {
         endwin();
         fprintf(stderr, "Terminal resolution too small. Minimun is 12x48.\n");
-        free_list(head, GAME_OVER);
+        free_list(&head, GAME_OVER, -1);
         exit(EXIT_FAILURE);
     }
 
@@ -152,7 +152,7 @@ static bool check_for_exit(void)
     int exit_key = tolower(config.exit);
     if (tolower(player.key) == exit_key)
     {
-        free_list(head, GAME_OVER);
+        free_list(&head, GAME_OVER, -1);
         endwin();
         return true;
     }
@@ -166,7 +166,7 @@ static bool check_for_exit(void)
         else
             sleep(3);
 
-        free_list(head, GAME_OVER);
+        free_list(&head, GAME_OVER, -1);
 
         if (ret == GAME_RESTART)
         {
