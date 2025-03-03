@@ -40,7 +40,7 @@ void draw_bird(Player *player, Pipes *head, int col_size)
     }
     else
     {
-        (player->key == ' ') ? (player->bird_y -= jump_height) : (player->bird_y += gravity);
+        (player->key == config.jump) ? (player->bird_y -= jump_height) : (player->bird_y += gravity);
     }
 
     attron(COLOR_PAIR(1));
