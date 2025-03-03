@@ -31,6 +31,12 @@ int main(void)
 
     // Initialize random seed
     srand((unsigned int) time(NULL));
+
+    // Initialize leaderboard database
+    db_execute(CREATE, NULL, -1);
+
+    // Get all of the configurations
+    config = configuration();
     
     // Initialize ncurses
     setlocale(LC_ALL, "");
@@ -43,12 +49,6 @@ int main(void)
         start_color();
         use_default_colors();
     }
-
-    // Initialize leaderboard database
-    db_execute(CREATE, NULL, -1);
-
-    // Get all of the configurations
-    config = configuration();
 
     // Get the window size
     config.auto_resize ? getmaxyx(win, window_height, window_width) : (window_height = config.height, window_width = config.width);

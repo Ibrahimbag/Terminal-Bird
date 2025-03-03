@@ -2,173 +2,104 @@
 #include "configuration.h"
 #include <cjson/cJSON.h>
 #include <limits.h>
-#include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 /*  Code copy and pasted from: https://stackoverflow.com/a/3747128 */
-static char *get_json_string(void) 
+static char *get_json_string(void)
 {
-    long lSize;
-    FILE *fp = NULL;
-    char *json_string = NULL;
-
-    // Get the path to the configuration file
     char path[PATH_MAX];
     snprintf(path, sizeof(path), "%s/.Terminal-Bird/configurations.json", getenv("HOME"));
 
-    fp = fopen (path,"r");
-    if(!fp)   
+    FILE *fp = fopen(path, "r");
+    if (!fp)
         return NULL;
 
-    fseek( fp , 0L , SEEK_END);
-    lSize = ftell( fp );
-    rewind( fp );
+    fseek(fp, 0, SEEK_END);
+    long lSize = ftell(fp);
+    rewind(fp);
 
-    /* allocate memory for entire content */
-    json_string = calloc( 1, lSize+1 );
-    if( !json_string ) fclose(fp),fputs("memory alloc fails",stderr),exit(1);
+    char *json_string = calloc(1, lSize + 1);
+    if (!json_string)
+        fclose(fp), fputs("Memory alloc fails", stderr), exit(1);
 
-    /* copy the file into the json_string */
-    if( 1!=fread( json_string , lSize, 1 , fp) )
-    fclose(fp),free(json_string),fputs("entire read fails",stderr),exit(1);
+    if (fread(json_string, lSize, 1, fp) != 1)
+        fclose(fp), free(json_string), fputs("Entire read fails", stderr), exit(1);
 
     fclose(fp);
 
     return json_string;
 }
 
-static cJSON *get_item(cJSON *json, char *object_name, char *key_name)
+static cJSON *get_item(cJSON *json, const char *object_name, const char *key_name)
 {
-    // Get the object
     cJSON *object = cJSON_GetObjectItemCaseSensitive(json, object_name);
-    if (object == NULL) 
-    {
-        endwin();
-        printf("Error: %s object not found.\n", object_name);
-        cJSON_Delete(json);
-        exit(EXIT_FAILURE);
-    }
+    if (!object)
+        cJSON_Delete(json), fputs("object not found", stderr), exit(EXIT_FAILURE);
 
-    // Extract key-value pairs from object
     cJSON *item = cJSON_GetObjectItemCaseSensitive(object, key_name);
-    if (item == NULL) 
-    {
-        endwin();
-        printf("Error: Key '%s' not found in %s object.\n", key_name, object_name);
-        cJSON_Delete(json);
-        exit(EXIT_FAILURE);
-    }
+    if (!item)
+        cJSON_Delete(json), fputs("key not found", stderr), exit(EXIT_FAILURE);
 
     return item;
 }
 
-static void assign_config(Configurations *config, cJSON *json, char **object_names, char **key_names, size_t array_size)
+static void assign_config(Configurations *config, cJSON *json)
 {
-    for (size_t i = 0; i < array_size; i++) 
-    {
-        cJSON *item = get_item(json, object_names[i], key_names[i]);
-
-        // Return the value based on the type
-        switch (i) 
-        {
-            case 0:
-                config->auto_resize = cJSON_IsTrue(item);
-                break;
-            case 1:
-                config->height = item->valueint;
-                break;
-            case 2:
-                config->width = item->valueint;
-                break;
-            case 3:
-                config->bird_color = item->valueint;
-                break;
-            case 4:
-                config->pipe_color = item->valueint;
-                break;
-            case 5:
-                config->game_speed_multiplier = item->valuedouble;
-                break;
-            case 6:
-                config->show_score = cJSON_IsTrue(item);
-                break;
-            case 7:
-                config->jump_height = item->valueint;
-                break;
-            case 8:
-                config->gravity = item->valueint;
-                break;
-            case 9:
-                config->jump = item->valuestring[0];
-                break;
-            case 10:
-                config->exit = item->valuestring[0];
-                break;
-            case 11:
-                config->restart = item->valuestring[0];
-                break;
-            case 12:
-                config->background_color = item->valueint;
-                break;
-            case 13:
-                config->menu_shown = cJSON_IsTrue(item);
-                break;
-            case 14:
-                config->bot = cJSON_IsTrue(item);
-                break;
-            default:
-                break;
-        }
-    }
+    config->game_speed_multiplier = get_item(json, "General", "game_speed_multiplier")->valuedouble;
+    config->show_score = cJSON_IsTrue(get_item(json, "General", "show_score"));
+    config->menu_shown = cJSON_IsTrue(get_item(json, "General", "menu_shown"));
+    config->jump_height = get_item(json, "General", "jump_height")->valueint;
+    config->gravity = get_item(json, "General", "gravity")->valueint;
+    config->bot = cJSON_IsTrue(get_item(json, "General", "bot"));
+    config->bird_color = get_item(json, "Appearance", "bird_color")->valueint;
+    config->pipe_color = get_item(json, "Appearance", "pipe_color")->valueint;
+    config->background_color = get_item(json, "Appearance", "background_color")->valueint;
+    config->auto_resize = cJSON_IsTrue(get_item(json, "Display", "auto_resize"));
+    config->height = get_item(json, "Display", "height")->valueint;
+    config->width = get_item(json, "Display", "width")->valueint;
+    config->jump = get_item(json, "Keybinds", "jump")->valuestring[0];
+    config->exit = get_item(json, "Keybinds", "exit")->valuestring[0];
+    config->restart = get_item(json, "Keybinds", "restart")->valuestring[0];
 }
 
-Configurations configuration(void) 
+Configurations configuration(void)
 {
-    // Initialize the configurations
-    static Configurations config = {true, 24, 80, 3, 2, 1.00, true, 2, 1, ' ', 'q', 'r', -1, true, false};
-    char *object_names[] = {
-        "Display", "Display", "Display", 
-        "Appearance", "Appearance", "General", 
-        "General", "General", "General",
-        "Keybinds", "Keybinds", "Keybinds",
-        "Appearance", "General", "General"
-    };
-    char *key_names[] = {
-        "auto_resize", "height", "width", 
-        "bird_color", "pipe_color", "game_speed_multiplier", 
-        "show_score", "jump_height", "gravity",
-        "jump", "exit", "restart",
-        "background_color", "menu_shown", "bot"
+    static Configurations config = {
+        .game_speed_multiplier = 1.00,
+        .show_score = true,
+        .menu_shown = true,
+        .jump_height = 2,
+        .gravity = 1,
+        .bot = false,
+        .bird_color = 3,
+        .pipe_color = 2,
+        .background_color = -1,
+        .auto_resize = true,
+        .height = 24,
+        .width = 80,
+        .jump = ' ',
+        .exit = 'q',
+        .restart = 'r'
     };
 
     static bool executed = false;
     if (!executed)
     {
-        // Get the JSON string
-        char *json_string = NULL;
-        json_string = get_json_string();
-        if (json_string == NULL) 
-        { 
+        char *json_string = get_json_string();
+        if (!json_string)
             return config;
-        }
 
-        // Parse JSON string.
         cJSON *json = cJSON_Parse(json_string);
-        if (json == NULL) 
-        {
+        if (!json)
             return config;
-        }
         free(json_string);
 
-        // Assign the values from configuration file to the config struct
-        size_t array_size = sizeof(object_names) / sizeof(object_names[0]);
-        assign_config(&config, json, object_names, key_names, array_size);
+        assign_config(&config, json);
+        cJSON_Delete(json);
 
         executed = true;
-        cJSON_Delete(json);
     }
 
     return config;
 }
-
