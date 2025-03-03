@@ -18,6 +18,7 @@ typedef struct {
     char restart;
     int background_color;
     bool menu_shown;
+    bool bot;
 } Configurations;
 
 Configurations configuration(void);

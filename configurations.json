@@ -4,7 +4,8 @@
         "show_score": true,
         "menu_shown": true,
         "jump_height": 2,
-        "gravity": 1
+        "gravity": 1,
+        "bot": false
     },
     "Appearance": {
         "bird_color": 3,

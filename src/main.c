@@ -123,7 +123,7 @@ static void game(void)
     // Print the game elements
     erase();
     bkgd(COLOR_PAIR(4));
-    draw_bird(&player);
+    draw_bird(&player, head, window_width);
     draw_pipes(head, window_height, window_width);
     bool show_score = config.show_score;
     if (show_score)

@@ -114,6 +114,9 @@ static void assign_config(Configurations *config, cJSON *json, char **object_nam
             case 13:
                 config->menu_shown = cJSON_IsTrue(item);
                 break;
+            case 14:
+                config->bot = cJSON_IsTrue(item);
+                break;
             default:
                 break;
         }
@@ -123,20 +126,20 @@ static void assign_config(Configurations *config, cJSON *json, char **object_nam
 Configurations configuration(void) 
 {
     // Initialize the configurations
-    static Configurations config = {true, 24, 80, 3, 2, 1.00, true, 2, 1, ' ', 'q', 'r', -1, true};
+    static Configurations config = {true, 24, 80, 3, 2, 1.00, true, 2, 1, ' ', 'q', 'r', -1, true, false};
     char *object_names[] = {
         "Display", "Display", "Display", 
         "Appearance", "Appearance", "General", 
         "General", "General", "General",
         "Keybinds", "Keybinds", "Keybinds",
-        "Appearance", "General"
+        "Appearance", "General", "General"
     };
     char *key_names[] = {
         "auto_resize", "height", "width", 
         "bird_color", "pipe_color", "game_speed_multiplier", 
         "show_score", "jump_height", "gravity",
         "jump", "exit", "restart",
-        "background_color", "menu_shown"
+        "background_color", "menu_shown", "bot"
     };
 
     static bool executed = false;
