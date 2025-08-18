@@ -24,13 +24,18 @@ To build our code, you need [`git`](https://git-scm.com/), [`make`](https://www.
 
 #### Debian/Ubuntu or their derivatives:
 ```console
-$ sudo apt install git build-essential libncurses5-dev libncursesw5-dev libsqlite3-dev libcjson-dev
+$ sudo apt install git build-essential libncurses5-dev libncursesw5-dev libsqlite3-dev libcjson-dev libsdl2-dev libsdl2-mixer-dev
 ```
 #### Arch Linux or their derivatives:
+install SDL2 from either <https://aur.archlinux.org/packages/sdl2> or sdl12-compat
 ```console
-$ sudo pacman -S git base-devel ncurses sqlite cjson
+$ sudo pacman -S sdl12-compat
 ```
-
+and then
+```console
+$ sudo pacman -S git base-devel ncurses sqlite cjson sdl2_mixer
+```
+#### Building the code
 After installing all the required packages, we can now clone and build our code:
 ```console
 $ git clone https://github.com/Ibrahimbag/Terminal-Bird.git
@@ -114,3 +119,7 @@ So, there are two solutions you can apply:
 
 1. Change your terminal
 2. Edit the src/visuals.c file, replace or remove the characters not supported in your terminal and build the code again
+
+## Sounds
+
+Sounds are taken from here: <https://www.101soundboards.com/boards/10178-flappy-bird-sounds>

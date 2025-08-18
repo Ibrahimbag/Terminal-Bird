@@ -55,6 +55,7 @@ static void assign_config(Configurations *config, cJSON *json)
 	config->jump_height = get_item(json, "General", "jump_height")->valueint;
 	config->gravity = get_item(json, "General", "gravity")->valueint;
 	config->bot = cJSON_IsTrue(get_item(json, "General", "bot"));
+	config->sound_on = cJSON_IsTrue(get_item(json, "Sound", "sound_on"));
 	config->bird_color = get_item(json, "Appearance", "bird_color")->valueint;
 	config->pipe_color = get_item(json, "Appearance", "pipe_color")->valueint;
 	config->background_color = get_item(json, "Appearance", "background_color")->valueint;
@@ -73,6 +74,7 @@ Configurations configuration(void) {
 					.jump_height = 2,
 					.gravity = 1,
 					.bot = false,
+					.sound_on = false,
 					.bird_color = 3,
 					.pipe_color = 2,
 					.background_color = -1,

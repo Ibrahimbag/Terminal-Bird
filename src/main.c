@@ -2,6 +2,7 @@
 #include "leaderboard_db.h"
 #include "menu.h"
 #include "pipe_nodes.h"
+#include "play_sound.h"
 #include "visuals.h"
 #include <ctype.h>
 #include <locale.h>
@@ -35,6 +36,10 @@ int main(void) {
 
 	// Get all of the configurations
 	config = configuration();
+
+	if(config.sound_on && !init_sound()) {
+		config.sound_on = false;
+	}
 
 	// Initialize ncurses
 	setlocale(LC_ALL, "");
@@ -117,11 +122,16 @@ static void game(void) {
 	// Print the game elements
 	erase();
 	bkgd(COLOR_PAIR(4));
-	draw_bird(&player, head, window_width);
+
+	if(bird_jump(&player, head, window_width) && config.sound_on) {
+		play_sound("flap");
+	}
+	draw_bird(&player);
 	draw_pipes(head, window_height, window_width);
 	bool show_score = config.show_score;
 	if (show_score)
 		draw_score(&player);
+
 	refresh();
 
 	// Update the position of pipes
@@ -134,6 +144,7 @@ static void game(void) {
 static bool check_for_exit(void) {
 	// Check if terminal resolution is too small
 	if (check_terminal_resolution()) {
+		close_sound();
 		endwin();
 		fprintf(stderr,
 			"Terminal resolution too small. Minimun is 12x48.\n");
@@ -141,16 +152,23 @@ static bool check_for_exit(void) {
 		exit(EXIT_FAILURE);
 	}
 
+	unsigned long old_score = player.score;
+
 	// Check if user wants to quit while game is running
 	int exit_key = tolower(config.exit);
 	if (tolower(player.key) == exit_key) {
+		close_sound();
 		free_list(&head, GAME_OVER, -1);
 		endwin();
 		return true;
 	}
-
 	// If bird collided to somewhere, display game over screen
 	else if (bird_collided(head, &player, window_height, window_width)) {
+		if (config.sound_on) {
+			play_sound("hit");
+		}
+		sleep(1);
+
 		int ret = GAME_OVER;
 		if (config.menu_shown)
 			ret = game_over_menu(window_height, window_width,
@@ -167,12 +185,18 @@ static bool check_for_exit(void) {
 			return false;
 		} else if (ret == GAME_OVER) {
 			endwin();
+			close_sound();
 			if (!config.menu_shown)
 				printf("Score: %lu\n", player.score);
 			return true;
 		}
 	}
 
+	// If player passes the pipe, play point sound
+	if (old_score != player.score && config.sound_on) {
+		play_sound("point");
+	}
+	
 	return false;
 }
 

@@ -19,6 +19,7 @@ typedef struct {
 	int background_color;
 	bool menu_shown;
 	bool bot;
+	bool sound_on;
 } Configurations;
 
 Configurations configuration(void);

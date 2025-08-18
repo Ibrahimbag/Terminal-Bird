@@ -1,10 +1,11 @@
-CFLAGS = -O3 -Wall -Wpedantic -Wextra -g -D _DEFAULT_SOURCE -DNCURSES_STATIC -fsanitize=address,leak,undefined
+CFLAGS = -O3 -Wall -Wpedantic -Wextra -g -D _DEFAULT_SOURCE -DNCURSES_STATIC
+#SANITIZERS = -fsanitize=address,leak,undefined # use the sanitizer during development
 BIN = terminal-bird
 PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games
-LIBS = -lncursesw -lsqlite3 -lcjson
-DEPS = src/common.h src/configuration.h src/leaderboard_db.h src/menu.h src/pipe_nodes.h src/visuals.h 
-OBJ = src/main.o src/pipe_nodes.o src/visuals.o src/menu.o src/leaderboard_db.o src/configuration.o
+LIBS = -lncursesw -lsqlite3 -lcjson `sdl2-config --cflags --libs` -lSDL2_mixer
+DEPS = src/common.h src/configuration.h src/leaderboard_db.h src/menu.h src/pipe_nodes.h src/visuals.h src/play_sound.h
+OBJ = src/main.o src/pipe_nodes.o src/visuals.o src/menu.o src/leaderboard_db.o src/configuration.o src/play_sound.o
 HOME_DIR := $(shell echo ~$(SUDO_USER))
 
 %.o: %.c $(DEPS)
@@ -18,8 +19,9 @@ ${BIN}: $(OBJ)
 		@echo "*** Creating directory $(HOME_DIR)/.Terminal-Bird ***"
 		mkdir -p $(HOME_DIR)/.Terminal-Bird
 		cp configurations.json $(HOME_DIR)/.Terminal-Bird
+		cp -r sounds $(HOME_DIR)/.Terminal-Bird
 		@echo "*** Building the executable file ***"
-		$(CC) -o $@ $(OBJ) $(CFLAGS) $(LIBS)
+		$(CC) -o $@ $(OBJ) $(CFLAGS) $(LIBS) $(SANITIZERS)
 
 install: ${BIN}
 

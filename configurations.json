@@ -7,6 +7,9 @@
         "gravity": 1,
         "bot": false
     },
+    "Sound": {
+        "sound_on": true
+    },
     "Appearance": {
         "bird_color": 3,
         "pipe_color": 2,

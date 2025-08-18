@@ -3,7 +3,7 @@
 #include <ncurses.h>
 
 // Controlling of the bird
-void draw_bird(Player *player, Pipes *head, int col_size) {
+bool bird_jump(Player *player, Pipes *head, int col_size) {
 	Configurations config = configuration();
 
 	int jump_height = config.jump_height;
@@ -27,14 +27,23 @@ void draw_bird(Player *player, Pipes *head, int col_size) {
 		// Jump if the pipe is below the bird
 		if (player->bird_y > closest_pipe->pipe_bottom_peak - 2) {
 			player->bird_y -= jump_height;
+			return true;
 		} else {
 			player->bird_y += gravity;
 		}
 	} else {
-		(player->key == config.jump) ? (player->bird_y -= jump_height)
-					     : (player->bird_y += gravity);
+		if (player->key == config.jump) {
+			player->bird_y -= jump_height;
+			return true;
+		} else {
+			player->bird_y += gravity;
+		}
 	}
 
+	return false;
+}
+
+void draw_bird(Player *player) {
 	attron(COLOR_PAIR(1));
 	mvaddstr(player->bird_y, 19, "██");
 	attroff(COLOR_PAIR(1));

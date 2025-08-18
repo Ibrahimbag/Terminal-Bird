@@ -4,7 +4,8 @@
 #include "common.h"
 
 // Functions in visuals.c
-void draw_bird(Player *player, Pipes *head, int col_size);
+bool bird_jump(Player *player, Pipes *head, int col_size);
+void draw_bird(Player *player);
 void draw_pipes(Pipes *head, int row_size, int col_size);
 void draw_score(Player *player);
 
