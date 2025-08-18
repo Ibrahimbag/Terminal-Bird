@@ -18,8 +18,6 @@ typedef struct Pipe_s {
 } Pipes;
 
 // Game macros
-#define GAME_ONGOING 0
-#define GAME_OVER 1
-#define GAME_RESTART 2
+enum game_status { GAME_ONGOING, GAME_OVER, GAME_RESTART };
 
 #endif
