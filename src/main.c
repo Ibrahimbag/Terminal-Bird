@@ -20,179 +20,166 @@ static void game(void);
 static bool check_for_exit(void);
 static bool check_terminal_resolution(void);
 
-int main(void)
-{
-    // Exit from the game if user runned it as root
-    if (getuid() == 0)
-    {
-        fprintf(stderr, "Do not run this game as root.\n");
-        exit(EXIT_FAILURE);
-    }
+int main(void) {
+	// Exit from the game if user runned it as root
+	if (getuid() == 0) {
+		fprintf(stderr, "Do not run this game as root.\n");
+		exit(EXIT_FAILURE);
+	}
 
-    // Initialize random seed
-    srand((unsigned int) time(NULL));
+	// Initialize random seed
+	srand((unsigned int)time(NULL));
 
-    // Initialize leaderboard database
-    db_execute(CREATE, NULL, -1);
+	// Initialize leaderboard database
+	db_execute(CREATE, NULL, -1);
 
-    // Get all of the configurations
-    config = configuration();
-    
-    // Initialize ncurses
-    setlocale(LC_ALL, "");
-    WINDOW *win = initscr();
-    noecho();
-    curs_set(false);
-    nodelay(win, true);
-    if (has_colors() == true)
-    {
-        start_color();
-        use_default_colors();
-    }
+	// Get all of the configurations
+	config = configuration();
 
-    // Get the window size
-    config.auto_resize ? getmaxyx(win, window_height, window_width) : (window_height = config.height, window_width = config.width);
+	// Initialize ncurses
+	setlocale(LC_ALL, "");
+	WINDOW *win = initscr();
+	noecho();
+	curs_set(false);
+	nodelay(win, true);
+	if (has_colors() == true) {
+		start_color();
+		use_default_colors();
+	}
 
-    // Display the main menu
-    if (config.menu_shown)
-        main_menu(window_height, window_width);
+	// Get the window size
+	config.auto_resize
+	    ? getmaxyx(win, window_height, window_width)
+	    : (window_height = config.height, window_width = config.width);
 
-    // Color pairs to be used
-    int bird_color = config.bird_color;
-    if (bird_color < COLOR_BLACK || bird_color > COLOR_WHITE)
-    {
-        bird_color = COLOR_YELLOW;
-    }
+	// Display the main menu
+	if (config.menu_shown)
+		main_menu(window_height, window_width);
 
-    int pipe_color = config.pipe_color;
-    if (pipe_color < COLOR_BLACK || pipe_color > COLOR_WHITE)
-    {
-        pipe_color = COLOR_GREEN;
-    }
+	// Color pairs to be used
+	int bird_color = config.bird_color;
+	if (bird_color < COLOR_BLACK || bird_color > COLOR_WHITE) {
+		bird_color = COLOR_YELLOW;
+	}
 
-    int background_color = config.background_color;
+	int pipe_color = config.pipe_color;
+	if (pipe_color < COLOR_BLACK || pipe_color > COLOR_WHITE) {
+		pipe_color = COLOR_GREEN;
+	}
 
-    init_pair(1, bird_color, -1); // Bird
-    init_pair(2, -1, pipe_color); // Rest of the pipes exclude the bottom of upper pipe, top of lower pipe.
-    if (!(background_color < COLOR_BLACK) || !(background_color > COLOR_WHITE))
-    {
-        init_pair(3, pipe_color, background_color); // Bottom of upper pipe, top of lower pipe.
-        init_pair(4, -1, background_color);
-    }
-    else
-    {
-        init_pair(3, pipe_color, -1); // Bottom of upper pipe, top of lower pipe.
-    }
+	int background_color = config.background_color;
 
-    // Create the first pipe
-    head = first_node(head, get_random_position());
+	init_pair(1, bird_color, -1); // Bird
+	init_pair(2, -1, pipe_color); // Rest of the pipes exclude the bottom of
+				      // upper pipe, top of lower pipe.
+	if (!(background_color < COLOR_BLACK) ||
+	    !(background_color > COLOR_WHITE)) {
+		init_pair(3, pipe_color,
+			  background_color); // Bottom of upper pipe, top of
+					     // lower pipe.
+		init_pair(4, -1, background_color);
+	} else {
+		init_pair(3, pipe_color,
+			  -1); // Bottom of upper pipe, top of lower pipe.
+	}
 
-    // Start the game
-    float game_speed = config.game_speed_multiplier;
+	// Create the first pipe
+	head = first_node(head, get_random_position());
 
-    if (game_speed < 0.1 || game_speed > 10)
-    {
-        game_speed = 1.00;
-    }
+	// Start the game
+	float game_speed = config.game_speed_multiplier;
 
-    struct timespec remaining, request = {0, 70000000 / game_speed}; 
-    while (!check_for_exit())
-    {
-        if (config.auto_resize)
-            getmaxyx(win, window_height, window_width);
-        player.key = getch();
-        game();       
-        nanosleep(&request, &remaining);
-    }
+	if (game_speed < 0.1 || game_speed > 10) {
+		game_speed = 1.00;
+	}
+
+	struct timespec remaining, request = {0, 70000000 / game_speed};
+	while (!check_for_exit()) {
+		if (config.auto_resize)
+			getmaxyx(win, window_height, window_width);
+		player.key = getch();
+		game();
+		nanosleep(&request, &remaining);
+	}
 }
 
-static int get_random_position(void)
-{
-    int random_position = rand() % (window_height - 6) + 1;
-    return random_position;
+static int get_random_position(void) {
+	int random_position = rand() % (window_height - 6) + 1;
+	return random_position;
 }
 
-static void game(void)
-{
-    // if pipe is in specific position, clone a new pipe heading to the left
-    if (new_pipe_available(head, window_width)) 
-    {
-        new_pipe(head, get_random_position());
-    }
+static void game(void) {
+	// if pipe is in specific position, clone a new pipe heading to the left
+	if (new_pipe_available(head, window_width)) {
+		new_pipe(head, get_random_position());
+	}
 
-    // Print the game elements
-    erase();
-    bkgd(COLOR_PAIR(4));
-    draw_bird(&player, head, window_width);
-    draw_pipes(head, window_height, window_width);
-    bool show_score = config.show_score;
-    if (show_score)
-        draw_score(&player);
-    refresh();
+	// Print the game elements
+	erase();
+	bkgd(COLOR_PAIR(4));
+	draw_bird(&player, head, window_width);
+	draw_pipes(head, window_height, window_width);
+	bool show_score = config.show_score;
+	if (show_score)
+		draw_score(&player);
+	refresh();
 
-    // Update the position of pipes
-    update_pipe_position(head);
+	// Update the position of pipes
+	update_pipe_position(head);
 
-    // Free unused pipes that are out of the screen
-    free_list(&head, GAME_ONGOING, window_width);
+	// Free unused pipes that are out of the screen
+	free_list(&head, GAME_ONGOING, window_width);
 }
 
-static bool check_for_exit(void)
-{
-    // Check if terminal resolution is too small
-    if (check_terminal_resolution())
-    {
-        endwin();
-        fprintf(stderr, "Terminal resolution too small. Minimun is 12x48.\n");
-        free_list(&head, GAME_OVER, -1);
-        exit(EXIT_FAILURE);
-    }
+static bool check_for_exit(void) {
+	// Check if terminal resolution is too small
+	if (check_terminal_resolution()) {
+		endwin();
+		fprintf(stderr,
+			"Terminal resolution too small. Minimun is 12x48.\n");
+		free_list(&head, GAME_OVER, -1);
+		exit(EXIT_FAILURE);
+	}
 
-    // Check if user wants to quit while game is running
-    int exit_key = tolower(config.exit);
-    if (tolower(player.key) == exit_key)
-    {
-        free_list(&head, GAME_OVER, -1);
-        endwin();
-        return true;
-    }
+	// Check if user wants to quit while game is running
+	int exit_key = tolower(config.exit);
+	if (tolower(player.key) == exit_key) {
+		free_list(&head, GAME_OVER, -1);
+		endwin();
+		return true;
+	}
 
-    // If bird collided to somewhere, display game over screen
-    else if (bird_collided(head, &player, window_height, window_width))
-    {
-        int ret = GAME_OVER;
-        if (config.menu_shown)
-            ret = game_over_menu(window_height, window_width, player.score);
-        else
-            sleep(3);
+	// If bird collided to somewhere, display game over screen
+	else if (bird_collided(head, &player, window_height, window_width)) {
+		int ret = GAME_OVER;
+		if (config.menu_shown)
+			ret = game_over_menu(window_height, window_width,
+					     player.score);
+		else
+			sleep(3);
 
-        free_list(&head, GAME_OVER, -1);
+		free_list(&head, GAME_OVER, -1);
 
-        if (ret == GAME_RESTART)
-        {
-            player.score = 0;
-            player.bird_y = window_height / 2;
-            head = first_node(head, get_random_position());
-            return false;
-        }
-        else if (ret == GAME_OVER)
-        {
-            endwin();
-            if (!config.menu_shown)
-                printf("Score: %lu\n", player.score);
-            return true;
-        }
-    }
+		if (ret == GAME_RESTART) {
+			player.score = 0;
+			player.bird_y = window_height / 2;
+			head = first_node(head, get_random_position());
+			return false;
+		} else if (ret == GAME_OVER) {
+			endwin();
+			if (!config.menu_shown)
+				printf("Score: %lu\n", player.score);
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 // Check if user is using small terminal
-static bool check_terminal_resolution(void)
-{
-    if (window_height < 12 || window_width < 48)
-    {
-        return true;
-    }
-    return false;
+static bool check_terminal_resolution(void) {
+	if (window_height < 12 || window_width < 48) {
+		return true;
+	}
+	return false;
 }
