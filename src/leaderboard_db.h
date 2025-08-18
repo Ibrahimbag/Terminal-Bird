@@ -6,9 +6,7 @@ typedef struct {
     int score;
 } leaderboards;
 
-#define CREATE 0
-#define INSERT 1
-#define SELECT 2
+enum sql_statements { CREATE, INSERT, SELECT };
 
 leaderboards *db_execute(int operation_type, char *name, int score);
 void free_leaderboard(leaderboards *leaderboard);
