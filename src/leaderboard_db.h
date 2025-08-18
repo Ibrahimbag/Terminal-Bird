@@ -2,8 +2,8 @@
 #define DB_H
 
 typedef struct {
-    char *name;
-    int score;
+	char *name;
+	int score;
 } leaderboards;
 
 enum sql_statements { CREATE, INSERT, SELECT };
