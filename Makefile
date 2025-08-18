@@ -1,4 +1,4 @@
-CFLAGS = -O3 -std=c11 -Wall -Werror -Wpedantic -Wextra -g -D _DEFAULT_SOURCE -DNCURSES_STATIC
+CFLAGS = -O3 -Wall -Wpedantic -Wextra -g -fsanitize=address,leak,undefined -D _DEFAULT_SOURCE -DNCURSES_STATIC
 BIN = terminal-bird
 PREFIX = /usr/local
 INSTALLPATH = ${DESTDIR}${PREFIX}/games
