@@ -12,7 +12,8 @@
 
 static Mix_Chunk *playing_chunks[MAX_CHANNELS] = {0};
 
-static void free_chunks(void) {
+static void free_chunks(void)
+{
 	for (int i = 0; i < MAX_CHANNELS; i++) {
 		if (playing_chunks[i]) {
 			Mix_FreeChunk(playing_chunks[i]);
@@ -21,7 +22,8 @@ static void free_chunks(void) {
 	}
 }
 
-bool init_sound(void) {
+bool init_sound(void)
+{
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
 		fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
 		return false;
@@ -67,7 +69,8 @@ bool init_sound(void) {
 	return true;
 }
 
-void play_sound(const char *sound_effect) {
+void play_sound(const char *sound_effect)
+{
 	Mix_Chunk *sound = NULL;
 	if (strcmp(sound_effect, "flap") == 0) {
 		sound = playing_chunks[0];
@@ -87,7 +90,8 @@ void play_sound(const char *sound_effect) {
 	}
 }
 
-void close_sound(void) {
+void close_sound(void)
+{
 	// Wait for the channels to finish their sounds to avoid segfaults
 	while (Mix_Playing(-1) > 0) {
 		SDL_Delay(100);

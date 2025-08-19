@@ -3,7 +3,8 @@
 #include <ncurses.h>
 
 // Controlling of the bird
-bool bird_jump(Player *player, Pipes *head, int col_size) {
+bool bird_jump(Player *player, Pipes *head, int col_size)
+{
 	Configurations config = configuration();
 
 	int jump_height = config.jump_height;
@@ -19,8 +20,8 @@ bool bird_jump(Player *player, Pipes *head, int col_size) {
 	if (config.bot) {
 		// Get the closest pipe next to the bird
 		Pipes *closest_pipe = head;
-		while (closest_pipe->next != NULL &&
-		       closest_pipe->pipe_x > col_size - 16) {
+		while (closest_pipe->next != NULL
+		       && closest_pipe->pipe_x > col_size - 16) {
 			closest_pipe = closest_pipe->next;
 		}
 
@@ -43,14 +44,16 @@ bool bird_jump(Player *player, Pipes *head, int col_size) {
 	return false;
 }
 
-void draw_bird(Player *player) {
+void draw_bird(Player *player)
+{
 	attron(COLOR_PAIR(1));
 	mvaddstr(player->bird_y, 19, "██");
 	attroff(COLOR_PAIR(1));
 }
 
 // Print the pipes and the gaps
-void draw_pipes(Pipes *head, int row_size, int col_size) {
+void draw_pipes(Pipes *head, int row_size, int col_size)
+{
 	attron(COLOR_PAIR(2));
 	Pipes *ptr = head;
 	while (ptr != NULL) {
@@ -70,7 +73,8 @@ void draw_pipes(Pipes *head, int row_size, int col_size) {
 }
 
 // Print player's current score in up left corner of the screen
-void draw_score(Player *player) {
+void draw_score(Player *player)
+{
 	attron(A_BOLD);
 	mvprintw(0, 0, "%ld", player->score);
 	attroff(A_BOLD);

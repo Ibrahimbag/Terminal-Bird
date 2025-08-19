@@ -21,7 +21,8 @@ static void game(void);
 static bool check_for_exit(void);
 static bool check_terminal_resolution(void);
 
-int main(void) {
+int main(void)
+{
 	// Exit from the game if user runned it as root
 	if (getuid() == 0) {
 		fprintf(stderr, "Do not run this game as root.\n");
@@ -37,7 +38,7 @@ int main(void) {
 	// Get all of the configurations
 	config = configuration();
 
-	if(config.sound_on && !init_sound()) {
+	if (config.sound_on && !init_sound()) {
 		config.sound_on = false;
 	}
 
@@ -54,8 +55,8 @@ int main(void) {
 
 	// Get the window size
 	config.auto_resize
-	    ? getmaxyx(win, window_height, window_width)
-	    : (window_height = config.height, window_width = config.width);
+		? getmaxyx(win, window_height, window_width)
+		: (window_height = config.height, window_width = config.width);
 
 	// Display the main menu
 	if (config.menu_shown)
@@ -77,15 +78,15 @@ int main(void) {
 	init_pair(1, bird_color, -1); // Bird
 	init_pair(2, -1, pipe_color); // Rest of the pipes exclude the bottom of
 				      // upper pipe, top of lower pipe.
-	if (!(background_color < COLOR_BLACK) ||
-	    !(background_color > COLOR_WHITE)) {
-		init_pair(3, pipe_color,
-			  background_color); // Bottom of upper pipe, top of
-					     // lower pipe.
+	if (!(background_color < COLOR_BLACK)
+	    || !(background_color > COLOR_WHITE)) {
+		// Bottom of upper pipe, top of lower pipe. 
+		init_pair(3, pipe_color, background_color);
+		// background color
 		init_pair(4, -1, background_color);
 	} else {
-		init_pair(3, pipe_color,
-			  -1); // Bottom of upper pipe, top of lower pipe.
+		// Bottom of upper pipe, top of lower pipe.
+		init_pair(3, pipe_color,-1); 
 	}
 
 	// Create the first pipe
@@ -100,20 +101,23 @@ int main(void) {
 
 	struct timespec remaining, request = {0, 70000000 / game_speed};
 	while (!check_for_exit()) {
-		if (config.auto_resize)
+		if (config.auto_resize) {
 			getmaxyx(win, window_height, window_width);
+		}
 		player.key = getch();
 		game();
 		nanosleep(&request, &remaining);
 	}
 }
 
-static int get_random_position(void) {
+static int get_random_position(void)
+{
 	int random_position = rand() % (window_height - 6) + 1;
 	return random_position;
 }
 
-static void game(void) {
+static void game(void)
+{
 	// if pipe is in specific position, clone a new pipe heading to the left
 	if (new_pipe_available(head, window_width)) {
 		new_pipe(head, get_random_position());
@@ -123,7 +127,7 @@ static void game(void) {
 	erase();
 	bkgd(COLOR_PAIR(4));
 
-	if(bird_jump(&player, head, window_width) && config.sound_on) {
+	if (bird_jump(&player, head, window_width) && config.sound_on) {
 		play_sound("flap");
 	}
 	draw_bird(&player);
@@ -141,7 +145,8 @@ static void game(void) {
 	free_list(&head, GAME_ONGOING, window_width);
 }
 
-static bool check_for_exit(void) {
+static bool check_for_exit(void)
+{
 	// Check if terminal resolution is too small
 	if (check_terminal_resolution()) {
 		close_sound();
@@ -196,12 +201,13 @@ static bool check_for_exit(void) {
 	if (old_score != player.score && config.sound_on) {
 		play_sound("point");
 	}
-	
+
 	return false;
 }
 
 // Check if user is using small terminal
-static bool check_terminal_resolution(void) {
+static bool check_terminal_resolution(void)
+{
 	if (window_height < 12 || window_width < 48) {
 		return true;
 	}

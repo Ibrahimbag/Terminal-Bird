@@ -4,7 +4,8 @@
 #include <ncurses.h>
 #include <stdlib.h>
 
-Pipes *first_node(Pipes *head, int random) {
+Pipes *first_node(Pipes *head, int random)
+{
 	// Create the first node
 	Pipes *starting_node = malloc(sizeof(Pipes));
 	if (starting_node == NULL) {
@@ -22,7 +23,8 @@ Pipes *first_node(Pipes *head, int random) {
 	return starting_node;
 }
 
-bool new_pipe_available(Pipes *head, int col_size) {
+bool new_pipe_available(Pipes *head, int col_size)
+{
 	Pipes *ptr = head;
 	while (ptr != NULL) {
 		if (col_size - ptr->pipe_x == col_size - 50) {
@@ -33,7 +35,8 @@ bool new_pipe_available(Pipes *head, int col_size) {
 	return false;
 }
 
-void new_pipe(Pipes *head, int random) {
+void new_pipe(Pipes *head, int random)
+{
 	// Create the next node
 	Pipes *end_node = malloc(sizeof(Pipes));
 	if (end_node == NULL) {
@@ -60,7 +63,8 @@ void new_pipe(Pipes *head, int random) {
 	}
 }
 
-void update_pipe_position(Pipes *head) {
+void update_pipe_position(Pipes *head)
+{
 	// Move the pipes to the left of the screen
 	Pipes *ptr = head;
 	while (ptr != NULL) {
@@ -69,7 +73,8 @@ void update_pipe_position(Pipes *head) {
 	}
 }
 
-bool bird_collided(Pipes *head, Player *player, int row_size, int col_size) {
+bool bird_collided(Pipes *head, Player *player, int row_size, int col_size)
+{
 	// Check if the bird has hit the ground
 	if (player->bird_y >= row_size - 1) {
 		return true;
@@ -80,8 +85,8 @@ bool bird_collided(Pipes *head, Player *player, int row_size, int col_size) {
 	Pipes *ptr = head;
 	while (ptr != NULL) {
 		if (col_size - ptr->pipe_x == 20) {
-			if (player->bird_y <= ptr->pipe_top_end ||
-			    player->bird_y >= ptr->pipe_bottom_peak) {
+			if (player->bird_y <= ptr->pipe_top_end
+			    || player->bird_y >= ptr->pipe_bottom_peak) {
 				return true;
 			}
 			player->score++;
@@ -92,11 +97,12 @@ bool bird_collided(Pipes *head, Player *player, int row_size, int col_size) {
 	return false;
 }
 
-void free_list(Pipes **head, int status, int col_size) {
+void free_list(Pipes **head, int status, int col_size)
+{
 	// If game is still ongoing, free the nodes in the list that is unused
 	// if there is any. If the game is over, free all the nodes in the list.
-	if (status == GAME_ONGOING && (*head)->pipe_x > col_size + 3 &&
-	    (*head)->next != NULL) {
+	if (status == GAME_ONGOING && (*head)->pipe_x > col_size + 3
+	    && (*head)->next != NULL) {
 		Pipes *next;
 		next = (*head)->next;
 		free(*head);

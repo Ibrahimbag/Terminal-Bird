@@ -9,7 +9,8 @@
 #include <string.h>
 #include <time.h>
 
-static void leaderboard_menu(int yMax, int xMax) {
+static void leaderboard_menu(int yMax, int xMax)
+{
 	WINDOW *win = newwin(yMax, xMax, 0, 0);
 	box(win, 0, 0);
 
@@ -36,7 +37,8 @@ static void leaderboard_menu(int yMax, int xMax) {
 	delwin(win);
 }
 
-static void options_menu(int yMax, int xMax) {
+static void options_menu(int yMax, int xMax)
+{
 	WINDOW *win = newwin(yMax, xMax, 0, 0);
 
 	box(win, 0, 0);
@@ -59,7 +61,8 @@ static void options_menu(int yMax, int xMax) {
 	delwin(win);
 }
 
-void main_menu(int yMax, int xMax) {
+void main_menu(int yMax, int xMax)
+{
 	// Create a window for the menu
 	WINDOW *win = newwin(yMax, xMax, 0, 0);
 	nodelay(win, true);
@@ -67,15 +70,15 @@ void main_menu(int yMax, int xMax) {
 
 	// Menu title
 	char *menu_title[] = {
-	    " _____                   _             _ \n",
-	    "|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n",
-	    "  | |/ _ \\ '__| '_ ` _ \\| | '_ \\ / _` | |\n",
-	    "  | |  __/ |  | | | | | | | | | | (_| | |\n",
-	    "  |_ \\___|_| _|_| |_| |_|_|_|_|_|\\__,_|_|\n",
-	    "            | __ )(_)_ __ __| |          \n",
-	    "            |  _ \\| | '__/ _` |          \n",
-	    "            | |_) | | | | (_| |          \n",
-	    "            |____/|_|_|  \\__,_|          \n",
+		" _____                   _             _ \n",
+		"|_   _|__ _ __ _ __ ___ (_)_ __   __ _| |\n",
+		"  | |/ _ \\ '__| '_ ` _ \\| | '_ \\ / _` | |\n",
+		"  | |  __/ |  | | | | | | | | | | (_| | |\n",
+		"  |_ \\___|_| _|_| |_| |_|_|_|_|_|\\__,_|_|\n",
+		"            | __ )(_)_ __ __| |          \n",
+		"            |  _ \\| | '__/ _` |          \n",
+		"            | |_) | | | | (_| |          \n",
+		"            |____/|_|_|  \\__,_|          \n",
 	};
 
 	size_t n = sizeof(menu_title) / sizeof(menu_title[0]);
@@ -152,7 +155,8 @@ void main_menu(int yMax, int xMax) {
 	}
 }
 
-int game_over_menu(int yMax, int xMax, int score) {
+int game_over_menu(int yMax, int xMax, int score)
+{
 	// Create a window for the game over screen
 	WINDOW *win = newwin(yMax / 2, xMax / 2, yMax / 4, xMax / 4);
 	keypad(win, true);
@@ -186,7 +190,7 @@ int game_over_menu(int yMax, int xMax, int score) {
 		wrefresh(win);
 	}
 
-    	// Print game over title
+	// Print game over title
 	char *game_over_title[] = {
 		" ___                    \n",
 		"/  _>  ___ ._ _ _  ___  \n",
@@ -204,7 +208,7 @@ int game_over_menu(int yMax, int xMax, int score) {
 
 	for (size_t i = 0; i < n; i++) {
 		mvwaddstr(win, i + 1, xMax / 4 - game_over_title_half_width,
-		game_over_title[i]);
+			  game_over_title[i]);
 	}
 	box(win, 0, 0);
 

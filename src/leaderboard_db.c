@@ -12,7 +12,8 @@
 static leaderboards *leaderboard = NULL;
 static int count = 0;
 
-static int callback(void *data, int argc, char **value, char **key) {
+static int callback(void *data, int argc, char **value, char **key)
+{
 	UNUSED(data);
 	UNUSED(key);
 
@@ -32,7 +33,8 @@ static int callback(void *data, int argc, char **value, char **key) {
 	return 0;
 }
 
-leaderboards *db_execute(int operation_type, char *name, int score) {
+leaderboards *db_execute(int operation_type, char *name, int score)
+{
 	sqlite3 *db = NULL;
 	char *zErrMsg = 0, *sql = NULL;
 	int rc;
@@ -58,8 +60,8 @@ leaderboards *db_execute(int operation_type, char *name, int score) {
 		break;
 	case INSERT:
 		sql = sqlite3_mprintf(
-		    "INSERT INTO leaderboards (name, score) VALUES ('%q', %d);",
-		    name, score);
+			"INSERT INTO leaderboards (name, score) VALUES ('%q', %d);",
+			name, score);
 		leaderboard = NULL;
 		break;
 	case SELECT:
@@ -98,7 +100,8 @@ leaderboards *db_execute(int operation_type, char *name, int score) {
 	return leaderboard;
 }
 
-void free_leaderboard(leaderboards *leaderboard) {
+void free_leaderboard(leaderboards *leaderboard)
+{
 	if (leaderboard != NULL) {
 		for (int i = 0; i < 30; i++) {
 			if (leaderboard[i].name != NULL) {
