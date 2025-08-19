@@ -112,12 +112,14 @@ Configurations configuration(void)
 	static bool executed = false;
 	if (!executed) {
 		char *json_string = get_json_string();
-		if (!json_string)
+		if (!json_string) {
 			return config;
+		}
 
 		cJSON *json = cJSON_Parse(json_string);
-		if (!json)
+		if (!json) {
 			return config;
+		}
 		free(json_string);
 
 		assign_config(&config, json);

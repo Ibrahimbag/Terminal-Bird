@@ -59,8 +59,9 @@ int main(void)
 		: (window_height = config.height, window_width = config.width);
 
 	// Display the main menu
-	if (config.menu_shown)
+	if (config.menu_shown) {
 		main_menu(window_height, window_width);
+	}
 
 	// Color pairs to be used
 	int bird_color = config.bird_color;
@@ -133,8 +134,9 @@ static void game(void)
 	draw_bird(&player);
 	draw_pipes(head, window_height, window_width);
 	bool show_score = config.show_score;
-	if (show_score)
+	if (show_score) {
 		draw_score(&player);
+	}
 
 	refresh();
 
@@ -175,9 +177,10 @@ static bool check_for_exit(void)
 		sleep(1);
 
 		int ret = GAME_OVER;
-		if (config.menu_shown)
+		if (config.menu_shown) {
 			ret = game_over_menu(window_height, window_width,
 					     player.score);
+		}
 		else
 			sleep(3);
 
@@ -191,8 +194,9 @@ static bool check_for_exit(void)
 		} else if (ret == GAME_OVER) {
 			endwin();
 			close_sound();
-			if (!config.menu_shown)
+			if (!config.menu_shown) {
 				printf("Score: %lu\n", player.score);
+			}
 			return true;
 		}
 	}
