@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD033 -->
+
 # Terminal Bird 🐦
 
 ![Video Demo](demo.gif) \
@@ -29,13 +31,21 @@ make && sudo make install
 
 To build our code, you need [`git`](https://git-scm.com/), [`make`](https://www.gnu.org/software/make/), [C standart library](https://en.wikipedia.org/wiki/C_standard_library), [`ncurses`](https://invisible-island.net/ncurses/), [`sqlite3`](https://www.sqlite.org/), [`cjson`](https://github.com/DaveGamble/cJSON) and a compiler (such as [`GCC`](https://gcc.gnu.org/), [`Clang`](https://clang.llvm.org/) or etc) installed on your system.
 
-#### Debian/Ubuntu or their derivatives
+#### Getting the dependencies
+
+<details>
+
+<summary><b>Debian/Ubuntu or their derivatives</b></summary>
 
 ```console
 sudo apt install git build-essential libncurses5-dev libncursesw5-dev libsqlite3-dev libcjson-dev libsdl2-dev libsdl2-mixer-dev
 ```
 
-#### Arch Linux or their derivatives
+</details>
+
+<details>
+
+<summary><b>Arch Linux or their derivatives</b></summary>
 
 install SDL2 from either <https://aur.archlinux.org/packages/sdl2> or sdl12-compat
 
@@ -47,7 +57,10 @@ and then
 
 ```console
 sudo pacman -S git base-devel ncurses sqlite cjson sdl2_mixer
+
 ```
+
+</details>
 
 #### Building the code
 
