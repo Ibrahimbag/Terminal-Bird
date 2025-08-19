@@ -1,3 +1,4 @@
+#include "play_sound.h"
 #include "pipe_nodes.h"
 #include <errno.h>
 #include <ncurses.h>
@@ -10,6 +11,7 @@ Pipes *first_node(Pipes *head, int random) {
 		endwin();
 		perror("Error");
 		free_list(&head, GAME_OVER, -1);
+		close_sound();
 		exit(EXIT_FAILURE);
 	}
 	starting_node->pipe_x = 3;
@@ -38,6 +40,7 @@ void new_pipe(Pipes *head, int random) {
 		endwin();
 		perror("Error");
 		free_list(&head, GAME_OVER, -1);
+		close_sound();
 		exit(EXIT_FAILURE);
 	}
 	end_node->pipe_x = 3;

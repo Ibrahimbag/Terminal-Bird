@@ -1,3 +1,4 @@
+#include "play_sound.h"
 #include "menu.h"
 #include "configuration.h"
 #include "leaderboard_db.h"
@@ -137,10 +138,12 @@ void main_menu(int yMax, int xMax) {
 				break;
 			default:
 				endwin();
+				close_sound();
 				exit(EXIT_SUCCESS);
 			}
 		} else if (tolower(key) == exit_key) {
 			endwin();
+			close_sound();
 			exit(EXIT_SUCCESS);
 		}
 
