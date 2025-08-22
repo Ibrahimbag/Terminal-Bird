@@ -18,7 +18,7 @@ First, we have to install [WSL](https://learn.microsoft.com/en-us/windows/wsl/ab
 After installation, we can now install the required packages, dependencies and build our code by writing these commands to the shell:
 
 ```console
-sudo apt install git build-essential libncurses5-dev libncursesw5-dev libsqlite3-dev libcjson-dev
+sudo apt install git build-essential libncurses5-dev libncursesw5-dev libsqlite3-dev libcjson-dev libsdl2-dev libsdl2-mixer-dev
 
 git clone https://github.com/Ibrahimbag/Terminal-Bird.git
 
